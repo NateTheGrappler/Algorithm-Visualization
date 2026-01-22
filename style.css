@@ -6,12 +6,36 @@ h1{
     text-align: center;
     text-decoration: solid;
     font-weight: bold;
-    text-wrap: calc();
 }
-.algorithmButton{
-    border: 3px solid white;
-    color: white;
-    width: 100;
-    height: 100;
+.button-container{
+    border: 5px solid rebeccapurple;
+    color: red;
+    width: auto;
+    height: auto;
+    display: inline-block;
+    margin: 3px 3px 0px 3px;
+    padding-left: 10px;
+    background-color: transparent;
+    border-radius: 10px;
 
+}
+.algTitle{
+    display: block;
+    height: 25;
+}
+
+.algImage{
+    width: 200px;
+    height: 200px;
+    color: black;
+    display: block;
+}
+
+.algTime{
+    display: block;
+    height: 10px;
+}
+.algDescription{
+    display: block;
+    height: 15px;
 }
