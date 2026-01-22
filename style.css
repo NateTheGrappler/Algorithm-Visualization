@@ -1,0 +1,14 @@
+body{
+    background-color: black;
+}
+h1{
+    color: white;
+    text-align: center;
+    text-decoration: solid;
+    font-weight: bold;
+    text-wrap: calc();
+}
+.algorithmButton{
+    border: 3px solid white;
+    color: white;
+}
