@@ -1,41 +1,108 @@
-body{
-    background-color: black;
+body{                                                                                              /*The main background for the page*/
+    background-color: rgb(189, 232, 245);
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
 }
-h1{
+.top{
+    background-color: rgb(6, 12, 58);
+}
+footer{
+    background-color: rgb(6, 12, 58);
+    margin-top: 0 auto;
+    padding: 1px;
+    text-align: left;
+    margin-top: 1;
+}
+h1{                                                                                                /*The text inside of the the header div*/
     color: white;
     text-align: center;
-    text-decoration: solid;
     font-weight: bold;
+    font-size: 48px;
+    letter-spacing: 1px;
+
 }
-.button-container{
+header {                                                                                           /*The blue background for the header*/
+    background-color: rgb(80, 88, 156);
+    margin: 0 auto;
+    width: 100%;
+    padding: 20px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+    text-align: center;
+    white-space: wrap;
+}
+.DescriptionDiv{                                                                                   /*The divs in the header*/
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+}
+.headerDiv{                                                                                        /*The main title div with the big text*/
+    background-color: rgb(28, 77, 141);
+    display: inline-block;
+    width: 60%;
+    height: auto;
+    align-content: space-around;
+    border: 5px solid;
+    border-radius: 10px;
+    border-color: rgb(15, 40, 84);
+    text-align: center;
+    margin: 0 auto;
+
+    /*Shadow to make it look floaty*/
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.7),
+     8px 8px 20px rgba(0, 0, 0, 0.2);
+
+     /*A animation to make it feel more 3d*/
+     transform: translate(-10px);
+     transition: transform 1s, ease, box-shadow 1s ease;
+}
+#Description{                                                                                      /*The Description under the main title*/
+    white-space: wrap;
+    height: auto;
+    color: white;
+    font-weight: 200;
+    font-size: large;
+}
+.button-container{                                                                                 /*The button to navigate to a given alg*/
     border: 5px solid rebeccapurple;
     color: red;
     width: auto;
     height: auto;
     display: inline-block;
-    margin: 3px 3px 0px 3px;
-    padding-left: 10px;
-    background-color: transparent;
+    margin: 3px 3px 3px 3px;
+    padding: 0;
+    background-color: rgb(73, 136, 196);
     border-radius: 10px;
-
+    overflow: hidden;
 }
-.algTitle{
+.algTitle {                                                                                        /*The Title inside of the button*/
     display: block;
-    height: 25;
+    align-items: center; 
+    justify-content: center; 
+    font-size: x-large;
+    font-weight: bold;
+    color: aliceblue;
+    background-color: aqua;
+    padding: 8px 0;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    border-bottom: 4px solid rgb(15, 40, 84);
 }
-
-.algImage{
-    width: 200px;
-    height: 200px;
+.algImage{                                                                                         /*The image representing the alg*/
+    max-width: 250px;
+    max-height: 250px;
+    width: 100%;
+    height: 100%;
     color: black;
     display: block;
 }
-
-.algTime{
+.algTime{                                                                                          /*Time Complexity of alg*/
     display: block;
     height: 10px;
 }
-.algDescription{
+.algDescription{                                                                                   /*Sort*/
     display: block;
     height: 15px;
 }

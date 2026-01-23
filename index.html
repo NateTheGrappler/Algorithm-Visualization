@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<!--Bubble Sort, Selection Sort, Insertion Sort, MergeSort, QuickSort, HeapSort, Shell Sort, Tim Sort, Counting Sort, Radix Sort, Bucket Sort, IntroSort-->
+<!--Bubble Sort, Selection Sort, Insertion Sort, MergeSort, QuickSort, HeapSort, Shell Sort, Tim Sort, Counting Sort, Radix Sort, Bucket Sort, Intro Sort-->
 
 <!--The Comments given are so extensive because I was learning html while
 coding this project, and used comments as notes for how things worked-->
@@ -24,7 +24,26 @@ coding this project, and used comments as notes for how things worked-->
     <body>
 
         <!--The main title for display-->
-        <h1> Choose Your Algorithm!!! </h1>
+        <header>
+            <!--The Div with the main title-->
+            <div class="headerDiv">
+                <h1> Choose Your Algorithm!!! </h1>
+            </div>
+            <div class="DescriptionDiv">
+                <!--The Description-->
+                <P id="Description"> Sorting Algorithms sort large or small amounts of data according to a set of criteria, usually lowest to greatest.
+                    They are critical in the field of data science, but show up in nearly every other profession as well. This website
+                    explores some of the different methods of approach to sorting algorithms.
+                </P>
+            </div>
+            <div class="DescriptionDiv">
+                <!--the search bar-->
+                <form class="searchBar">
+                    <input type="text" id="search-input" name="q" placeholder="Search...">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </header>
         <hr>
         
         <!-- The main container to hold all of the alg options-->
@@ -32,14 +51,18 @@ coding this project, and used comments as notes for how things worked-->
 
             <!--Buttons/Alg options-->
             <button class="button-container">
-                <p   class="algTitle"> Bubble Sort</p>                                                                 <!--The Name Of the algorithm-->
+                <p   class="algTitle"> Bubble Sort 🫧</p>                                                                 <!--The Name Of the algorithm-->
                 <img class="algImage" src="Images/bubbleSort.png" alt="Image of Bubble Sort Algorithm">                <!--Creative Image for alg-->
                 <p   class="algTime"> Time Complexity: O(n^2)</p>                                                      <!--The Time Complexity-->
                 <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                   <!--Quick Description of the algorithm-->
             </button>
         </div>
-        
+
+        <!--Footer at the bottom of my sight-->
+        <footer>
+            <p>My own website regarding algorithm sorting</p>
+            <nav >
+        </footer>
+
     </body>
-
-
 </html>
