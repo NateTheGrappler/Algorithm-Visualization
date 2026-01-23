@@ -27,7 +27,7 @@ coding this project, and used comments as notes for how things worked-->
         <header>
             <!--The Div with the main title-->
             <div class="headerDiv">
-                <h1> Choose Your Algorithm!!! </h1>
+                <h1> Data Sorting Algorithms </h1>
             </div>
             <div class="DescriptionDiv">
                 <!--The Description-->
@@ -47,22 +47,137 @@ coding this project, and used comments as notes for how things worked-->
         <hr>
         
         <!-- The main container to hold all of the alg options-->
-        <div>
+        <div id="buttonContainerDiv">
 
             <!--Buttons/Alg options-->
             <button class="button-container">
-                <p   class="algTitle"> Bubble Sort 🫧</p>                                                                 <!--The Name Of the algorithm-->
-                <img class="algImage" src="Images/bubbleSort.png" alt="Image of Bubble Sort Algorithm">                <!--Creative Image for alg-->
-                <p   class="algTime"> Time Complexity: O(n^2)</p>                                                      <!--The Time Complexity-->
+                <div class="title-time-container">
+                    <span class="algTitle">Bubble Sort</span>
+                    <span class="algTime">O(n^2)</span>
+                </div>                                                                                                  <!--The Time Complexity-->
+                <img class="algImage" src="Images/bubbleSort.png" alt="Image of Bubble Sort Algorithm">                 <!--Creative Image for alg-->
+                <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                    <!--Quick Description of the algorithm-->
+            </button>
+
+            <button class="button-container">
+                <div class="title-time-container">
+                    <span class="algTitle">Bogo Sort</span>
+                    <span class="algTime">O(n*n!)</span>
+                </div> 
+                <img class="algImage" src="Images/bogoSort.png" alt="Image of Bubble Sort Algorithm">                  <!--Creative Image for alg-->
+                <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                   <!--Quick Description of the algorithm-->
+            </button>
+
+            <button class="button-container">
+                <div class="title-time-container">
+                    <span class="algTitle">Shell Sort</span>
+                    <span class="algTime">O(nlog(n))</span>
+                </div> 
+                <img class="algImage" src="Images/shellSort.png" alt="Image of Bubble Sort Algorithm">                 <!--Creative Image for alg-->
+                <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                   <!--Quick Description of the algorithm-->
+            </button>
+
+            <button class="button-container">
+                <div class="title-time-container">
+                    <span class="algTitle">Merge Sort</span>
+                    <span class="algTime">O(nlog(n))</span>
+                </div> 
+                <img class="algImage" src="Images/mergeSort.png" alt="Image of Bubble Sort Algorithm">                 <!--Creative Image for alg-->
+                <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                   <!--Quick Description of the algorithm-->
+            </button>
+
+            <button class="button-container">
+                <div class="title-time-container">
+                    <span class="algTitle">Quick Sort</span>
+                    <span class="algTime">O(nlog(n))</span>
+                </div> 
+                <img class="algImage" src="Images/quickSort.png" alt="Image of Bubble Sort Algorithm">                 <!--Creative Image for alg-->
+                <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                   <!--Quick Description of the algorithm-->
+            </button>
+
+            <button class="button-container">
+                <div class="title-time-container">
+                    <span class="algTitle">Bucket Sort</span>
+                    <span class="algTime">O(n)</span>
+                </div> 
+                <img class="algImage" src="Images/bucketSort.png" alt="Image of Bubble Sort Algorithm">                <!--Creative Image for alg-->
+                <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                   <!--Quick Description of the algorithm-->
+            </button>
+
+            <button class="button-container">
+                <div class="title-time-container">
+                    <span class="algTitle">Counting Sort</span>
+                    <span class="algTime">O(n)</span>
+                </div> 
+                <img class="algImage" src="Images/countingSort.png" alt="Image of Bubble Sort Algorithm">               <!--Creative Image for alg-->
+                <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                    <!--Quick Description of the algorithm-->
+            </button>
+
+            <button class="button-container">
+                <div class="title-time-container">
+                    <span class="algTitle">Insertion Sort</span>
+                    <span class="algTime">O(n^2)</span>
+                </div> 
+                <img class="algImage" src="Images/insertionSort.png" alt="Image of Bubble Sort Algorithm">              <!--Creative Image for alg-->
+                <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                    <!--Quick Description of the algorithm-->
+            </button>
+
+            <button class="button-container">
+                <div class="title-time-container">
+                    <span class="algTitle">Radix Sort</span>
+                    <span class="algTime">O(d(n+k))</span>
+                </div> 
+                <img class="algImage" src="Images/radixSort.png" alt="Image of Bubble Sort Algorithm">                  <!--Creative Image for alg-->
+                <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                    <!--Quick Description of the algorithm-->
+            </button>
+
+            <button class="button-container">
+                <div class="title-time-container">
+                    <span class="algTitle">Intro Sort</span>
+                    <span class="algTime">O(nlog(n))</span>
+                </div> 
+                <img class="algImage" src="Images/introSort.png" alt="Image of Bubble Sort Algorithm">                 <!--Creative Image for alg-->
+                <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                   <!--Quick Description of the algorithm-->
+            </button>
+
+            <button class="button-container">
+                <div class="title-time-container">
+                    <span class="algTitle">Heap Sort</span>
+                    <span class="algTime">O(nlog(n))</span>
+                </div> 
+                <img class="algImage" src="Images/heapSort.png" alt="Image of Bubble Sort Algorithm">                  <!--Creative Image for alg-->
+                <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                   <!--Quick Description of the algorithm-->
+            </button>
+
+            <button class="button-container">
+                <div class="title-time-container">
+                    <span class="algTitle">Selection Sort</span>
+                    <span class="algTime">O(n^2)</span>
+                </div> 
+                <img class="algImage" src="Images/selectionSort.png" alt="Image of Bubble Sort Algorithm">              <!--Creative Image for alg-->
+                <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                    <!--Quick Description of the algorithm-->
+            </button>
+
+            <button class="button-container">
+                <div class="title-time-container">
+                    <span class="algTitle">Tim Sort</span>
+                    <span class="algTime">O(n)</span>
+                </div> 
+                <img class="algImage" src="Images/timSort.png" alt="Image of Bubble Sort Algorithm">                   <!--Creative Image for alg-->
+                <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                   <!--Quick Description of the algorithm-->
+            </button>
+            <button class="button-container">
+                <div class="title-time-container">
+                    <span class="algTitle">Stalin Sort</span>
+                    <span class="algTime">O(n)</span>
+                </div> 
+                <img class="algImage" src="Images/stalinSort.png" alt="Image of Bubble Sort Algorithm">                <!--Creative Image for alg-->
                 <p   class="algDescription"> Swaps Adjacent Elements Till Sorted</p>                                   <!--Quick Description of the algorithm-->
             </button>
         </div>
 
         <!--Footer at the bottom of my sight-->
-        <footer>
-            <p>My own website regarding algorithm sorting</p>
-            <nav >
-        </footer>
+
 
     </body>
 </html>
