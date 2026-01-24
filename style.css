@@ -65,6 +65,11 @@ header {                                                                        
     font-weight: 200;
     font-size: large;
 }
+#noResultsDiv{
+    display: none;
+    font-size: x-large;
+    margin: auto 0;
+}
 #buttonContainerDiv{
     display: flex;
     flex-wrap: wrap;
@@ -75,9 +80,9 @@ header {                                                                        
 }
 .button-container{                                                                                 /*The button to navigate to a given alg*/
     border: 5px solid rebeccapurple;
-    flex: 1 1 250px;
-    max-width: 300px;
-    min-width: 200px;
+    flex: 1 1 200px;
+    max-width: 350px;
+    min-width: 250px;
     height: auto;
     display: inline-block;
     margin: 10px;
@@ -125,7 +130,7 @@ header {                                                                        
 
 }
 .algImage{                                                                                         /*The image representing the alg*/
-    max-width: 300px;
+    max-width: 350px;
     max-height: 250px;
     width:  100%;
     height: 100%;
