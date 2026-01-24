@@ -80,3 +80,56 @@ header {                                                                        
     font-weight: 200;
     font-size: large;
 }
+#mainContentDiv{
+    display: flex;
+}
+
+.game-container{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    background-color: purple;
+    min-height: calc(100vh - 200px);
+}
+.controlContainer{
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    background-color: red;
+    width: 30%;
+    min-height: calc(100vh - 200px);
+
+}
+.controlButton{
+    display: block;
+    padding: 10px;
+    margin-top: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+}
+.containerDiv{
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    width: 80vmin; /* Uses the smaller of vw or vh */
+    height: 80vmin;
+    max-width: 400px; /* Optional: Set maximum size */
+    max-height: 400px;
+    min-width: 250px; /* Optional: Set minimum size */
+    min-height: 250px;
+    margin: 20px;
+    background-color: red;
+}
+
+.ticTacToeButton{
+    display: inline-block;
+    min-width: 0;
+    min-height: 0;
+}
+
+.ticTacToeButton:hover{
+
+}

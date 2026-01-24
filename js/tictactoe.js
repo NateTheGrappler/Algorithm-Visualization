@@ -1,4 +1,4 @@
-//function for go back button
+//function to navigate back to alg page
 function goBack()
 {
     console.log("Went Back");
