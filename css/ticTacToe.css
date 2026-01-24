@@ -1,0 +1,82 @@
+body{                                                                                              /*The main background for the page*/
+    background-color: rgb(189, 232, 245);
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+header {                                                                                           /*The blue background for the header*/
+    background-color: rgb(80, 88, 156);
+    margin: 0 auto;
+    width: 100%;
+    padding: 10px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+    text-align: left;
+    white-space: wrap;
+}
+#backButton{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 300px;
+    height: 60px;
+    width: 60px;
+    padding: 0;
+    margin: 0 20px;
+    background-color: rgb(28, 77, 141);
+    border: 3px solid rgb(15, 40, 84);
+    box-sizing: border-box;
+
+
+}
+#backButton:hover{
+    background-color: rgb(35, 90, 165); /* Darker blue */
+    border-color: rgb(25, 55, 110);
+    transform: scale(1.05); /* Slight grow effect */
+}
+.maskedImage{
+    display: block;
+    width: 50px;
+    height: 50px;
+    mask-image: url("/Images/arrowBack.png");
+    background-color: white;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    -webkit-mask-image: url('/Images/arrowBack.png');
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+}
+#holderDiv{
+    display: inline-block;
+    width: 85%;
+    text-align: center;
+}
+#mainTitle{
+    display: inline-block;
+    margin:auto 0;
+    background-color: rgb(28, 77, 141);
+    width: 75%;
+    padding: 16px;
+    border-radius: 10px;
+    border-color: rgb(15, 40, 84);
+    text-align: center;
+    border: 3px solid rgb(15, 40, 84);
+    color: white;
+    font-weight: bold;
+    font-size: 48px;
+}
+#descriptionDiv{
+    display: flex;
+    width: 100%;
+    text-align: center;
+
+}
+#description{                                                                                      /*The Description under the main title*/
+    white-space: wrap;
+    line-height: 1.7;
+    text-justify: inter-word;
+    hyphens: auto;
+    height: auto;
+    color: white;
+    font-weight: 200;
+    font-size: large;
+}
