@@ -17,7 +17,6 @@ searchBar.addEventListener('input', function(e)
         const titleSpan = button.querySelector(".algTitle");
         const actualName = titleSpan.textContent.toLowerCase().trim();
 
-        //console.log(`Checking: ${actualName} for "${typedInput}"`); // Debug log
 
         //see if the search is contained in the button names
         if(actualName === '' || actualName.includes(typedInput))
@@ -25,13 +24,11 @@ searchBar.addEventListener('input', function(e)
             //change the button to remain as visible
             button.style.display = 'inline-block';
             visibleCount++;
-            console.log(`✓ ${actualName} matches`); // Debug log
         }
         else
         {
             //make the button invisible
             button.style.display = 'none';
-            //console.log(`✗ ${actualName} doesn't match`); // Debug log
         }
 
     });

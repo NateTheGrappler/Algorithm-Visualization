@@ -4,6 +4,8 @@ const pvrButton = document.getElementById("PVR");
 const undoButton = document.getElementById("Undo");
 const redoButton = document.getElementById("Redo");
 let board = ["None", "None", "None", "None", "None", "None", "None", "None", "None"];
+let redoMoveList = new Array();
+let undoMoveList = new Array();
 const boardButtons = document.getElementById("containerDiv").querySelectorAll('button');
 let turnCount = 0;
 let matchType = "None";
@@ -29,12 +31,16 @@ function handleBoardClick()                                                     
         //set button to X if even and update board
         buttonImage.src = 'Images/xTicTacToe.png';
         board[buttonIndex] = "X";
+        undoMoveList.push(buttonIndex);
+        document.getElementById("gameText").textContent = "Player O's Turn";
     }
     else
     {
         //set button to O if odd and update board
         buttonImage.src = 'Images/oTicTacToe.png';
         board[buttonIndex] = "O";
+        undoMoveList.push(buttonIndex);
+        document.getElementById("gameText").textContent = "Player X's Turn";
     }
 
 
@@ -68,6 +74,9 @@ function handleBoardClick()                                                     
         }
     }
 
+    //update the undo/redo move situation
+    undoOrRedoUpdate();
+
     //update the image display, then disable the button, and increment turn
     buttonImage.style.display = "inline-flex";
     clickedButton.disabled=true;
@@ -86,12 +95,12 @@ document.addEventListener("DOMContentLoaded", function(){                       
     }
     if(undoButton)
     {
-        //pvrButton.addEventListener('click', playAgainstBot);
+        undoButton.addEventListener('click', undoButtonClick);
         undoButton.style.backgroundColor = "lightgray";
     }
     if(redoButton)
     {
-        //pvrButton.addEventListener('click', playAgainstBot);
+        redoButton.addEventListener('click', redoButtonClick);
         redoButton.style.backgroundColor = "lightgray";
     }
 
@@ -175,6 +184,34 @@ function checkDraw()                                                            
     }
 
 }
+function undoOrRedoUpdate()                                                             //visual update of the undo/redo buttons
+{
+    console.log(undoMoveList.length)
+    if(undoMoveList.length > 0)
+    {
+        //enable undo move
+        undoButton.style.backgroundColor = `rgb(${178}, ${176}, ${232})`;
+        undoButton.disabled = false;
+    }
+    else
+    {
+        //disable the button
+        undoButton.disabled = true;
+        undoButton.style.backgroundColor = "lightgray";
+    }
+    if(redoMoveList.length > 0)
+    {
+        //enable redo move
+        redoButton.style.backgroundColor = `rgb(${178}, ${176}, ${232})`;
+        redoButton.disabled = false;
+    }
+    else
+    {
+        //disable the button
+        redoButton.disabled = true;
+        redoButton.style.backgroundColor = "lightgray";
+    }
+}
 //---------------------------------Side Button function--------------------------
 
 function resetBoard()                                                                   //Resets the game to be played again
@@ -183,6 +220,8 @@ function resetBoard()                                                           
     //set turn count back to zero and reset the board
     turnCount = 0;
     board = ["None", "None", "None", "None", "None", "None", "None", "None", "None"];
+    undoMoveList = new Array();
+    redoMoveList = new Array();
 
     //get rid of all images and disable all buttons
     boardButtons.forEach(button =>{
@@ -254,4 +293,68 @@ function playAgainstBot(event)                                                  
     //disable the buttons
     pvpButton.disabled = true;
     clickedButton.disabled = true;
+}
+function undoButtonClick()
+{
+    if(undoMoveList.length > 0)
+    {
+        //get the button that corresponds to the last index in the undo move list
+        const buttonToUndo = boardButtons[undoMoveList[undoMoveList.length-1]];
+        const buttonImg = buttonToUndo.querySelector(".buttonImage");
+
+        //add it to the redo move list and then remove it
+        redoMoveList.push(undoMoveList[undoMoveList.length-1]);
+        undoMoveList.pop();
+        
+        //clear the button's appearance
+        buttonToUndo.disabled = false;
+        buttonImg.src = "";
+        buttonImg.style.display = "none";
+
+        //turn back the turn count back by one and update text visual
+        turnCount -= 1;
+        if(turnCount % 2 == 0) {   document.getElementById("gameText").textContent = "Player X's Turn"; }
+        else                   {   document.getElementById("gameText").textContent = "Player O's Turn"; }
+
+        undoOrRedoUpdate()  
+    }
+}
+function redoButtonClick()
+{
+    console.log("Ran redo")
+    if(redoMoveList.length > 0)
+    {
+        //get button and button image
+        const buttonToRedo = boardButtons[redoMoveList[redoMoveList.length-1]];
+        const buttonImage = buttonToRedo.querySelector(".buttonImage");
+        
+        //change up button style
+        buttonToRedo.disabled = true;
+        buttonImage.style.display = "inline-flex";
+
+
+        //check turn count and then update image based on turn
+        if(turnCount % 2 == 0)
+        {
+            //set button to X if even and update board
+            buttonImage.src = 'Images/xTicTacToe.png';
+            board[redoMoveList.length-1] = "X";
+            undoMoveList.push(redoMoveList.length-1);
+            document.getElementById("gameText").textContent = "Player O's Turn";
+        }
+        else
+        {
+            //set button to O if odd and update board
+            buttonImage.src = 'Images/oTicTacToe.png';
+            board[redoMoveList.length-1] = "O";
+            undoMoveList.push(redoMoveList.length-1);
+            document.getElementById("gameText").textContent = "Player X's Turn";
+        }
+
+        //remove the button from the list and increment turn
+        redoMoveList.pop();
+        turnCount++;
+        undoOrRedoUpdate()  
+
+    }
 }
