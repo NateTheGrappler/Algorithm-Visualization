@@ -147,7 +147,7 @@ header {                                                                        
 }
 
 .ticTacToeButton:hover{
-    background-color: rgba(0, 0, 0, 0.2); /* Darker blue */
+    background-color: rgba(0, 0, 0, 0.2);
     border-style: solid;
     border-color: black;
     transform: scale(1.05);               /* Slight grow effect */
@@ -204,4 +204,17 @@ header {                                                                        
     border-width: 5px 0px 0px 5px;
     border-style: solid;
     border-color: black;
+}
+#gameText{
+    display: block;
+    padding: 10px;
+    margin-top: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+    color: white;
+    background-color: transparent;
+    border-color: transparent;
+    font-size: x-large;
+    font-weight: bold;
 }

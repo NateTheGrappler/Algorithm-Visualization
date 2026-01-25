@@ -16,7 +16,6 @@ function goBack()                                                               
     console.log("Went Back");
     window.history.back();
 }
-
 function handleBoardClick()                                                             //function that runs whenever a person makes a move
 {
     //get the button that was clicked and the inner image, and index of said button
@@ -40,17 +39,28 @@ function handleBoardClick()                                                     
 
 
     //check win/draw and respond
-    checkDraw();
     let hasWon = checkWin();
+    checkDraw();
     if(hasWon)
     {
         //loop over board and highlight wins/disable all buttons
         for(let i = 0; i<9; i++)
         {
+            //set background to hold
             if(board[i] == "WIN")
             {
                 //update background to gold
                 boardButtons[i].style.backgroundColor = "gold";
+            }
+
+            //update game text
+            if(turnCount % 2 == 0)
+            {
+                document.getElementById("gameText").textContent = "Player X Wins!";
+            }
+            else if(turnCount % 2 == 1)
+            {
+                document.getElementById("gameText").textContent = "Player O Wins!";
             }
 
             //disable button
@@ -63,7 +73,6 @@ function handleBoardClick()                                                     
     clickedButton.disabled=true;
     turnCount++;
 }
-
 document.addEventListener("DOMContentLoaded", function(){                               //function that is called upon entry into the page
 
     //check to see if found then add function
@@ -97,8 +106,6 @@ document.addEventListener("DOMContentLoaded", function(){                       
         button.addEventListener('click', handleBoardClick);
     });
 })
-
-
 function checkWin()                                                                     //Win condition checker
 {
     //loop over the three vertical/horizontal win conditions
@@ -106,10 +113,6 @@ function checkWin()                                                             
     {
         if(board[i] == board[i+1] && board[i+1] == board[i+2] && board[i]!="None")
         {
-            console.log("Horizontal");
-            console.log(board[i]);
-            console.log(board[i+1]);
-            console.log(board[i+2]);
             //set the winners to reflect win and return true
             board[i]   = "WIN"
             board[i+1] = "WIN"
@@ -165,6 +168,10 @@ function checkDraw()                                                            
             button.style.backgroundColor = "darkgray"
             button.disabled = true;
         })
+
+        //change game text
+        document.getElementById("gameText").textContent = "Wow! A Draw!";
+
     }
 
 }
@@ -190,6 +197,9 @@ function resetBoard()                                                           
         buttonImage.style.display = "none";
     })
 
+    //reset game text
+    document.getElementById("gameText").textContent = "Select A Mode!";
+
     //reset all of the avaliable buttons
     pvpButton.style.backgroundColor  = `rgb(${178}, ${176}, ${232})`;
     pvpButton.disabled = false;
@@ -208,6 +218,8 @@ function playVsFriend(event)                                                    
 
         button.disabled = false;
     });
+
+    document.getElementById("gameText").textContent = "Player Vs Player!";
 
     //set match type and also change button colors
     matchType = "PVP";
@@ -230,6 +242,8 @@ function playAgainstBot(event)                                                  
 
         button.disabled = false;
     });
+
+    document.getElementById("gameText").textContent = "Player Vs Robot!";
 
     //set match type and also change button colors
     matchType = "PVR";
