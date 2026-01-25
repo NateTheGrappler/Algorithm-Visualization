@@ -12,6 +12,9 @@ header {                                                                        
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
     text-align: left;
     white-space: wrap;
+    border-width: 0px 0px 5px 0px;
+    border-style: solid;
+    border-color: rgb(15, 40, 84);    
 }
 #backButton{
     display: inline-flex;
@@ -31,7 +34,7 @@ header {                                                                        
 #backButton:hover{
     background-color: rgb(35, 90, 165); /* Darker blue */
     border-color: rgb(25, 55, 110);
-    transform: scale(1.05); /* Slight grow effect */
+    transform: scale(1.05);               /* Slight grow effect */
 }
 .maskedImage{
     display: block;
@@ -63,6 +66,7 @@ header {                                                                        
     color: white;
     font-weight: bold;
     font-size: 48px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 }
 #descriptionDiv{
     display: flex;
@@ -88,8 +92,7 @@ header {                                                                        
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 70%;
-    background-color: purple;
+    width: 80%;
     min-height: calc(100vh - 200px);
 }
 .controlContainer{
@@ -97,9 +100,12 @@ header {                                                                        
     flex-direction: column;
     justify-content: center;
     align-items: stretch;
-    background-color: red;
-    width: 30%;
+    background-color: rgb(80, 88, 156);
+    width: 20%;
     min-height: calc(100vh - 200px);
+    border-width: 0px 0px 0px 4px;
+    border-style: solid;
+    border-color: rgb(15, 40, 84);
 
 }
 .controlButton{
@@ -109,6 +115,16 @@ header {                                                                        
     margin-left: 20px;
     margin-right: 20px;
     border-radius: 10px;
+    background-color: rgb(178, 176, 232);
+    border: 2px solid rgb(15, 40, 84);
+    font-size: large;
+    font-weight: bold;
+    color: white;    
+}
+.controlButton:hover{
+    background-color: rgb(205, 204, 242); /* Darker blue */
+    border-color: rgb(25, 55, 110);
+    transform: scale(1.05);               /* Slight grow effect */
 }
 .containerDiv{
     display: grid;
@@ -116,20 +132,76 @@ header {                                                                        
     grid-template-columns: repeat(3, 1fr);
     width: 80vmin; /* Uses the smaller of vw or vh */
     height: 80vmin;
-    max-width: 400px; /* Optional: Set maximum size */
-    max-height: 400px;
+    max-width: 500px; /* Optional: Set maximum size */
+    max-height: 500px;
     min-width: 250px; /* Optional: Set minimum size */
     min-height: 250px;
     margin: 20px;
-    background-color: red;
 }
 
 .ticTacToeButton{
     display: inline-block;
+    background-color: transparent;
     min-width: 0;
     min-height: 0;
 }
 
 .ticTacToeButton:hover{
+    background-color: rgba(0, 0, 0, 0.2); /* Darker blue */
+    border-style: solid;
+    border-color: black;
+    transform: scale(1.05);               /* Slight grow effect */
+}
 
+.buttonImage{
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+/*The borders for the buttons to set up their grid components*/
+#button1{
+    border-width: 0px 5px 5px 0px;
+    border-style: solid;
+    border-color: black;
+}
+#button2{
+    border-width: 0px 5px 5px 5px;
+    border-style: solid;
+    border-color: black;
+}
+#button3{
+    border-width: 0px 0px 5px 5px;
+    border-style: solid;
+    border-color: black;
+}
+#button4{
+    border-width: 5px 5px 5px 0px;
+    border-style: solid;
+    border-color: black;
+}
+#button5{
+    border-width: 5px 5px 5px 5px;
+    border-style: solid;
+    border-color: black;
+}
+#button6{
+    border-width: 5px 0px 5px 5px;
+    border-style: solid;
+    border-color: black;
+}
+#button7{
+    border-width: 5px 5px 0px 0px;
+    border-style: solid;
+    border-color: black;
+}
+#button8{
+    border-width: 5px 5px 0px 5px;
+    border-style: solid;
+    border-color: black;
+}
+#button9{
+    border-width: 5px 0px 0px 5px;
+    border-style: solid;
+    border-color: black;
 }
