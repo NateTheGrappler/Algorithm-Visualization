@@ -72,6 +72,40 @@ function handleBoardClick()                                                     
                 aiImage.style.display = "inline-flex";
                 aiButton.disabled=true;
                 turnCount ++;
+
+                let hasWon = checkWin();
+                checkDraw();
+                if(hasWon)
+                {
+                    //loop over board and highlight wins/disable all buttons
+                    for(let i = 0; i<9; i++)
+                    {
+                        //set background to hold
+                        if(board[i] == "WIN")
+                        {
+                            //update background to gold
+                            boardButtons[i].style.backgroundColor = "gold";
+                        }
+
+                        //update game text
+                        if(turnCount % 2 == 0)
+                        {
+                            document.getElementById("gameText").textContent = "Player X Wins!";
+                        }
+                        else if(turnCount % 2 == 1)
+                        {
+                            document.getElementById("gameText").textContent = "Player O Wins!";
+                        }
+
+                        //disable button
+                        boardButtons[i].disabled = true;
+                    }
+                }
+
+                //update the undo/redo move situation
+                undoOrRedoUpdate();
+
+                return;
             }
         }, 500);
     }
