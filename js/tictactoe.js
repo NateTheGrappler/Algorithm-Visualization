@@ -54,7 +54,6 @@ function handleBoardClick()                                                     
         undoMoveList.push(buttonIndex);
         document.getElementById("gameText").textContent = "Player O's Turn";
 
-        checkDraw();
         index = aiDecision();
 
         //set a slight delay so that was it looks realistic
@@ -71,10 +70,8 @@ function handleBoardClick()                                                     
                 //update the image to reflect what the ai does
                 aiImage.style.display = "inline-flex";
                 aiButton.disabled=true;
-                turnCount ++;
 
                 let hasWon = checkWin();
-                checkDraw();
                 if(hasWon)
                 {
                     //loop over board and highlight wins/disable all buttons
@@ -101,13 +98,16 @@ function handleBoardClick()                                                     
                         boardButtons[i].disabled = true;
                     }
                 }
+                else
+                {
+                    checkDraw();
+                }
 
                 //update the undo/redo move situation
                 undoOrRedoUpdate();
-
-                return;
+                turnCount ++;
             }
-        }, 500);
+        }, 0);
     }
 
     //Clear redo list when making a new move
@@ -115,7 +115,6 @@ function handleBoardClick()                                                     
 
     //check win/draw and respond
     let hasWon = checkWin();
-    checkDraw();
     if(hasWon)
     {
         //loop over board and highlight wins/disable all buttons
@@ -141,6 +140,10 @@ function handleBoardClick()                                                     
             //disable button
             boardButtons[i].disabled = true;
         }
+    }
+    else
+    {
+        checkDraw();
     }
 
     //update the undo/redo move situation
