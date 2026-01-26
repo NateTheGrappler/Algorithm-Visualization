@@ -26,23 +26,58 @@ function handleBoardClick()                                                     
     let buttonIndex = clickedButton.id.slice(-1) - 1;
 
     //check turn count and then update image based on turn
-    if(turnCount % 2 == 0)
+    if(matchType == "PVP")
+    {
+        if(turnCount % 2 == 0)
+        {
+            //set button to X if even and update board
+            buttonImage.src = 'Images/xTicTacToe.png';
+            board[buttonIndex] = "X";
+            undoMoveList.push(buttonIndex);
+            document.getElementById("gameText").textContent = "Player O's Turn";
+            aiDecision();
+        }
+        else
+        {
+            //set button to O if odd and update board
+            buttonImage.src = 'Images/oTicTacToe.png';
+            board[buttonIndex] = "O";
+            undoMoveList.push(buttonIndex);
+            document.getElementById("gameText").textContent = "Player X's Turn";
+        }
+    }
+    else if(matchType == "PVR")
     {
         //set button to X if even and update board
         buttonImage.src = 'Images/xTicTacToe.png';
         board[buttonIndex] = "X";
         undoMoveList.push(buttonIndex);
         document.getElementById("gameText").textContent = "Player O's Turn";
-    }
-    else
-    {
-        //set button to O if odd and update board
-        buttonImage.src = 'Images/oTicTacToe.png';
-        board[buttonIndex] = "O";
-        undoMoveList.push(buttonIndex);
-        document.getElementById("gameText").textContent = "Player X's Turn";
+
+        checkDraw();
+        index = aiDecision();
+
+        //set a slight delay so that was it looks realistic
+        setTimeout(() =>
+        {
+            if(index != "tie")
+            {
+                //based on the index, update the button the ai chooses
+                const aiButton = boardButtons[index];
+                const aiImage = aiButton.querySelector(".buttonImage");
+                aiImage.src = 'Images/oTicTacToe.png';
+                board[index] = "O";
+                document.getElementById("gameText").textContent = "Player X's Turn";
+                //update the image to reflect what the ai does
+                aiImage.style.display = "inline-flex";
+                aiButton.disabled=true;
+                turnCount ++;
+            }
+        }, 500);
     }
 
+    //Clear redo list when making a new move
+    redoMoveList = [];
 
     //check win/draw and respond
     let hasWon = checkWin();
@@ -186,7 +221,10 @@ function checkDraw()                                                            
 }
 function undoOrRedoUpdate()                                                             //visual update of the undo/redo buttons
 {
-    console.log(undoMoveList.length)
+    // console.log("Undo Move List: ")
+    // console.log(undoMoveList)
+    // console.log("Redo Move List: ")
+    // console.log(redoMoveList)
     if(undoMoveList.length > 0)
     {
         //enable undo move
@@ -304,12 +342,14 @@ function undoButtonClick()
 
         //add it to the redo move list and then remove it
         redoMoveList.push(undoMoveList[undoMoveList.length-1]);
+        board[undoMoveList[undoMoveList.length-1]] = "None";
         undoMoveList.pop();
         
         //clear the button's appearance
         buttonToUndo.disabled = false;
         buttonImg.src = "";
         buttonImg.style.display = "none";
+
 
         //turn back the turn count back by one and update text visual
         turnCount -= 1;
@@ -338,16 +378,16 @@ function redoButtonClick()
         {
             //set button to X if even and update board
             buttonImage.src = 'Images/xTicTacToe.png';
-            board[redoMoveList.length-1] = "X";
-            undoMoveList.push(redoMoveList.length-1);
+            board[redoMoveList[redoMoveList.length-1]] = "X";
+            undoMoveList.push(redoMoveList[redoMoveList.length-1]);
             document.getElementById("gameText").textContent = "Player O's Turn";
         }
         else
         {
             //set button to O if odd and update board
             buttonImage.src = 'Images/oTicTacToe.png';
-            board[redoMoveList.length-1] = "O";
-            undoMoveList.push(redoMoveList.length-1);
+            board[redoMoveList[redoMoveList.length-1]] = "O";
+            undoMoveList.push(redoMoveList[redoMoveList.length-1]);
             document.getElementById("gameText").textContent = "Player X's Turn";
         }
 
@@ -357,4 +397,165 @@ function redoButtonClick()
         undoOrRedoUpdate()  
 
     }
+}
+
+//------------------------------Determine AI Behavior-----------------------------
+function aiDecision()                                                                  //returns the index the ai decides is best
+{
+    let copyBoard = board.slice();
+    //first try to see if you have any winning moves
+    let winIndex = possibleWinCheck(copyBoard);
+    if(winIndex != "NoWin")
+    {
+        console.log("There should be a winning move");
+        return winIndex;
+    }
+    else
+    {
+        console.log("No win detected");
+    }
+
+
+    //then if you don't, block opponent if they have winning moves
+    let looseCheck = possibleLoseCheck(copyBoard);
+    if(looseCheck != "NoLose")
+    {
+        console.log("There is a loose if you do not go at index: ", looseCheck)
+        return looseCheck;
+    }
+    else
+    {
+        console.log("No lose detected");
+    }
+
+    //then if there is an open lane, go there
+    let openLane = checkOpenLane(copyBoard);
+    if(openLane.length > 0)
+    {
+        //select a random digit in the lane
+        let randInt = Math.floor(Math.random() * 2);
+        console.log("random value chosen", openLane[randInt]);
+        return openLane[randInt];
+    }
+
+    //then just click randomly
+    let notChosen = true;
+    while(notChosen)
+    {
+        //randomly pick until you get a random empty square
+        let randInt = Math.floor(Math.random() * 9);
+        if(board[randInt] == "None")
+        {
+            console.log("Found Random Index: ", randInt)
+            notChosen = false;
+            return randInt
+        }
+        //if there is no clear square, stop loop
+        if(!board.includes("None"))
+        {
+            notChosen = false;
+            return "tie";
+        }
+    }
+}
+
+function possibleWinCheck(copiedBoard)                                                     //checks if AI has winning move                                            
+{
+
+    //loop over each possible move that the ai could make
+    for(let j = 0; j < copiedBoard.length; j++)
+    {
+        //if a space is empty, fill it in and see what happens
+        if(copiedBoard[j] == "None")
+        {
+            copiedBoard[j] = "O"
+        }
+        else
+        {
+            continue;
+        }
+
+        //run the win condition each time
+        //loop over the three horizontal win conditions
+        for(let i = 0; i<9; i+=3)
+        {
+            if(copiedBoard[i] == copiedBoard[i+1] && copiedBoard[i+1] == copiedBoard[i+2] && copiedBoard[i]=="O") { copiedBoard[j] = "None"; return j.toString();  }
+        }
+
+        //check over the vertical positions as well
+        for(let i = 0; i<3; i++)
+        {
+            if(copiedBoard[i] == copiedBoard[i+3] && copiedBoard[i+3] == copiedBoard[i+6] && copiedBoard[i]!="None") { copiedBoard[j] = "None"; return j.toString(); }
+        }
+
+        //also check diagonal positions
+        if(copiedBoard[0] == copiedBoard[4] && copiedBoard[4] == copiedBoard[8] && copiedBoard[0]=="O") { copiedBoard[j] = "None"; return j.toString();  }
+        if(copiedBoard[2] == copiedBoard[4] && copiedBoard[4] == copiedBoard[6] && copiedBoard[2]=="O") { copiedBoard[j] = "None"; return j.toString(); }
+
+        //reset the string back to none if it's not a winning move
+        copiedBoard[j] = "None";
+
+    };
+
+    return "NoWin";
+}
+
+function possibleLoseCheck(copiedBoard)                                                     //checks if AI has loosing move
+{
+    //loop over each possible move that the ai could make
+    for(let j = 0; j < copiedBoard.length; j++)
+    {
+        //if a space is empty, fill it in and see what happens, else skip interation
+        if(copiedBoard[j] == "None")
+        {
+            copiedBoard[j] = "X"
+        }
+        else
+        {
+            continue;
+        }
+
+        //run the win condition each time
+        //loop over the three horizontal win conditions
+        for(let i = 0; i<9; i+=3)
+        {
+            if(copiedBoard[i] == copiedBoard[i+1] && copiedBoard[i+1] == copiedBoard[i+2] && copiedBoard[i]!="None") { return j;  }
+        }
+
+        //check over the vertical positions as well
+        for(let i = 0; i<3; i++)
+        {
+            if(copiedBoard[i] == copiedBoard[i+3] && copiedBoard[i+3] == copiedBoard[i+6] && copiedBoard[i]!="None") { return j; }
+        }
+
+        //also check diagonal positions
+        if(copiedBoard[0] == copiedBoard[4] && copiedBoard[4] == copiedBoard[8] && copiedBoard[0]!="None") { return j;  }
+        if(copiedBoard[2] == copiedBoard[4] && copiedBoard[4] == copiedBoard[6] && copiedBoard[2]!="None") { return j; }
+
+        //reset the string back to none if it's not a winning move
+        copiedBoard[j] = "None";
+
+    };
+
+    return "NoLose";
+}
+
+function checkOpenLane(copiedBoard)
+{
+    //check over each of the lanes, to see which one is free
+    for(let i = 0; i<9; i+=3)
+    {
+        if(copiedBoard[i] == copiedBoard[i+1] && copiedBoard[i+1] == copiedBoard[i+2] && copiedBoard[i]=="None") { return [i, i+1, i+2];  }
+    }
+
+    for(let i = 0; i<3; i++)
+    {
+        if(copiedBoard[i] == copiedBoard[i+3] && copiedBoard[i+3] == copiedBoard[i+6] && copiedBoard[i]=="None") { return [i, i+3, i+6]; }
+    }
+
+    if(copiedBoard[0] == copiedBoard[4] && copiedBoard[4] == copiedBoard[8] && copiedBoard[0]=="O") { copiedBoard[j] = "None"; return [0, 4, 8];  }
+    if(copiedBoard[2] == copiedBoard[4] && copiedBoard[4] == copiedBoard[6] && copiedBoard[2]=="O") { copiedBoard[j] = "None"; return [2, 4, 6]; }
+
+    //return nothing if there is no option
+    return [];
 }
