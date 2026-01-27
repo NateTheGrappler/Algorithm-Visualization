@@ -7,7 +7,7 @@
     </head>
     <body>
         <!--The Top of the board for viewing-->
-        <header>
+        <header id="mainHeader">
 
             <!--The div to hold the button-->
             <div id="buttonDiv">
@@ -20,7 +20,7 @@
 
             <!--The Div to hold the main header content-->
             <div id="headerDiv">
-                <h1 id="headerText">Algorithm Name</h1>
+                <h2 id="headerText">Algorithm Name</h2>
             </div>
 
             <!--The Div to hold the -->
@@ -32,9 +32,23 @@
 
         <!--The main container div-->
         <div class="mainContent">
+            
+            <!--The div that holds the array and the help buttons-->
             <div class = "arrayContainer">
+                
+                <!--The div for the help buttons-->
+                <div id="extraInfoDiv">
+                    <button id="hideHeaderButton" onclick="hideHeader()"></button>
+                    <div    id="spaceHolderDiv"></div>
+                    <button id="helpButton"></button>
+                    <button id="descriptionButton"></button>
+                    <button id="showCodeButton"></button>
+                </div>
 
+                <!--The div for the actual array-->
             </div>
+
+            <!--The Div that holds the bottom control buttons-->
             <div class = "buttonContainer">
                 <!--Buttons to control action-->
                 <button id="startButton">Start</button>
@@ -59,6 +73,6 @@
             </div>
         </div>            
 
-
+        <script src="js/algorithim.js"></script>
     </body>
 </html>
