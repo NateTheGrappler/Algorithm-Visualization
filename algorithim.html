@@ -36,6 +36,25 @@
 
             </div>
             <div class = "buttonContainer">
+                <!--Buttons to control action-->
+                <button id="startButton">Start</button>
+                <button id="pauseButton">Pause</button>
+                <button id="stopButton"> Stop</button>
+                <button id="resetButton">Reset</button>
+
+                <!--The speed slider-->
+                <label class="arrayInputLabel" for="speedSlider">Speed: </label>
+                <input type="range" id="speedSlider" name="speedSlider" min="1" max="100" value="50">
+
+                <!--Set the min and max value-->
+                <label class="arrayInputLabel" for="minValue">Min Value: </label>
+                <input type="number" id="minValue" name="minValue" value="0" placeholder="min of 0">
+                <label class="arrayInputLabel" for="maxValue">Max Value: </label>
+                <input type="number" id="maxValue" name="maxValue" value="50" placeholder="Input range max">
+
+                <!--Set the n number of elements-->
+                <label class="arrayInputLabel" for="nInput">Number of Elements: </label>
+                <input type="number" id="nInput" name="nInput" value="30" placeholder="Max of 200">
 
             </div>
         </div>            
