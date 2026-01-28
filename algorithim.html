@@ -55,7 +55,7 @@
                     <button  id="showCodeButton">
                         <svg id="codeImage" xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#e3e3e3"><path d="m379-343 44-44-93-93 92-92-44-44-136 136 137 137Zm202 0 137-137-137-137-44 44 93 93-93 93 44 44ZM180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h600q24 0 42 18t18 42v600q0 24-18 42t-42 18H180Zm0-60h600v-600H180v600Zm0-600v600-600Z"/></svg>
                     </button>
-                    
+
                     <button  id="showCodeButton">
                         <svg id="codeImage" xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#e3e3e3"><path d="m379-343 44-44-93-93 92-92-44-44-136 136 137 137Zm202 0 137-137-137-137-44 44 93 93-93 93 44 44ZM180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h600q24 0 42 18t18 42v600q0 24-18 42t-42 18H180Zm0-60h600v-600H180v600Zm0-600v600-600Z"/></svg>
                     </button>
@@ -85,11 +85,26 @@
 
                 <!--Set the n number of elements-->
                 <label class="arrayInputLabel" for="nInput">Number of Elements: </label>
-                <input type="number" id="nInput" name="nInput" value="750" placeholder="Max of 200">
+                <input type="number" id="nInput" name="nInput" value="30" placeholder="Max of 200">
                 <button id="generateButton"> Generate </button>
 
             </div>
-        </div>            
+        </div>   
+        
+        <!--The other window pop ups-->
+        <div id = "mainDescriptionWindow">
+
+            <!--The top bar div-->
+            <div id="descriptionTopBar">
+                <div>Description</div>
+            </div>
+
+            <!--The main body of the window div-->
+            <div id="descriptionBody">
+
+            </div>
+
+        </div>
 
         <script src="js/algorithim.js"></script>
     </body>

@@ -107,13 +107,11 @@ class algorithimVisualizer{
 
 }
 
-
 //when loading, create the class with all of the information
 document.addEventListener("DOMContentLoaded", ()=>
 {
     new algorithimVisualizer();
 });
-
 
 //----------------------------------Code that handles the top portion of the array container-----------------------------------
 function hideHeader()
@@ -135,3 +133,53 @@ function hideHeader()
     }
 
 }
+
+//------------------------------------------------The Draggable Window pop ups-------------------------------------------------
+
+//get the tops of the windows, the ones you click and drag on
+const descriptionTop = document.getElementById("descriptionTopBar");
+
+descriptionTop.addEventListener("mousedown", (e) =>{
+    
+    //get the parent element of the thing that is clicked on
+    let parentElement = e.target.parentElement;
+    let parentBox = parentElement.getBoundingClientRect();
+
+    //set previous position
+    let prevX = e.clientX;
+    let prevY = e.clientY;
+
+    //define the functions to handle the other event listeners
+    function mouseUpEventHandler()
+    {
+        //remove the event handlers so they dont clash
+        window.removeEventListener("mousemove", mouseMoveEventHandler);
+        window.removeEventListener("mouseup", mouseUpEventHandler)
+    }
+    function mouseMoveEventHandler(e)
+    {
+        //different between window object's position and new mouse potion (windowPos - mousePos)
+        let movementX = prevX - e.clientX;
+        let movementY = prevY - e.clientY;
+
+        //get the actual coordinate position
+        let x = parentBox.left - movementX;
+        let y = parentBox.top - movementY;
+
+        //checks to not go out of bounds
+        if(x < 0)   {x=0;}
+        if(y < 0)   {y=0;}
+        if(x > window.innerWidth - parentBox.width) { x = window.innerWidth - parentBox.width;}
+        if(y > window.innerHeight - parentBox.height) { y =  window.innerHeight - parentBox.height;}
+
+        //set the coordinate
+        parentElement.style.top = y+"px";
+        parentElement.style.left = x+"px";
+    }
+
+    //add the other event listeners
+    window.addEventListener("mousemove", mouseMoveEventHandler);
+    window.addEventListener("mouseup", mouseUpEventHandler)
+    
+    
+});

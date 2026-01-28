@@ -197,7 +197,6 @@ header{
     min-height: 400px;
 
 }
-
 .array-element {
     background: #ffffff;
     border-radius: 2px 2px 0 0;
@@ -212,6 +211,38 @@ header{
     color: black;
     font-weight: bold;
     font-size: 14px;
+}
+
+/*---------------------------------------------The description floating window----------------------------------------------------->*/
+
+#mainDescriptionWindow{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 50%;
+    border-radius: 20px;
+    border: 3px solid white;
+    position:absolute;
+}
+
+#descriptionTopBar{
+    display: flex;
+    background-color: #061624;
+    border-color: white;
+    border-style: solid;
+    border-width: 0px 0px 3px 0px;
+    border-radius: 20px 20px 0px 0px;
+    width: 100%;
+    height: 15%;
+}
+#descriptionBody{
+    width: 100%;
+    flex-grow: 1;
+    background-color: #081d30;
+    border-radius: 0px 0px 20px 20px;
+
 }
 
 
