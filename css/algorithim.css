@@ -76,7 +76,7 @@ header{
     flex-wrap: nowrap;
     margin: 10px;
 }
-#startButton, #pauseButton, #resetButton, #stopButton{
+#startButton, #pauseButton, #resetButton, #stopButton, #generateButton{
     width: 10%;
     margin-left: clamp(2px, 1vw, 10px);
     padding: 8px;
@@ -115,6 +115,13 @@ header{
     background-color: #9f76d4;
     transform: scale(1.1);
 }
+#generateButton{
+    background-color: #e8ee4c;
+}
+#generateButton:hover{
+    background-color: #d1d344;
+    transform: scale(1.1);
+}
 #nInput, #minValue, #maxValue{
     min-width: 40px;
     max-width: 200px;
@@ -142,6 +149,8 @@ header{
 .arrayContainer{
     flex: 1;
     min-height: calc(100vh - 205px);
+    display: flex;
+    flex-direction: column;
 }
 
 /*---------------------------------------------Extra Info Styling----------------------------------------------------->*/
@@ -175,4 +184,34 @@ header{
     object-fit: fill;
     object-position: center;
 }
+
+/*---------------------------------------------The actual array rendering----------------------------------------------------->*/
+#arrayShowcase{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    transition: all 0.3s ease;
+    gap: 0px;
+    height: 92%;
+    width: 100%;
+    min-height: 400px;
+
+}
+
+.array-element {
+    background: #ffffff;
+    border-radius: 2px 2px 0 0;
+    border-color: lightgray;
+    border-style: solid;
+    border-width: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    color: black;
+    font-weight: bold;
+    font-size: 14px;
+}
+
 
