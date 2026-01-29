@@ -31,11 +31,6 @@ class algorithimVisualizer{
         this.getArrayName();
     }
 
-    setUpButtons()
-    {
-
-    }
-
     //------------------------------------Array related functions-----------------------------
     generateArray()
     {
@@ -89,20 +84,39 @@ class algorithimVisualizer{
     {
         const urlParams = new URLSearchParams(window.location.search);
         this.arrayName = decodeURIComponent(urlParams.get('name') || "");
-        console.log(this.arrayName);
     }
 
 
     //-----------------------------------Button Function Calls--------------------------------
     setUpButtons()
     {
+        //get all of the top buttons
+        const helpWindow = document.getElementById("helpWindow");
+        const inputWindow = document.getElementById("inputWindow");
+        const codeWindow = document.getElementById("codeWindow");
+        const descriptionWindow = document.getElementById("mainDescriptionWindow");
+
+        //add a click to all of them
+        document.getElementById("helpButton").addEventListener('click', () => {handleWindowClick(helpWindow)});
+        document.getElementById("descriptionButton").addEventListener('click', () => {handleWindowClick(descriptionWindow)});
+        document.getElementById("showCodeButton").addEventListener('click', () => {handleWindowClick(codeWindow)})
+        document.getElementById("inputButton").addEventListener('click', () => {handleWindowClick(inputWindow)});
+        function handleWindowClick(window)
+        {
+            console.log("RAN HERE");
+            if(window.style.display == "none")  { window.style.display = "flex"; }
+            else                                { window.style.display = "none"; }
+        }
+
         //the generate new array button
         document.getElementById("generateButton").addEventListener('click', ()=>
         {
             this.generateButtonClick();
-        })
+        });
+        document.getElementById("backButton").addEventListener('click', ()=>{
+            backButtonClick();
+        });
 
-        //the top buttons for extra info and such
 
     }
     generateButtonClick()
@@ -143,6 +157,10 @@ function hideHeader()
         mainContent.style.height = '100vh';     
     }
 
+}
+function backButtonClick()
+{
+    window.history.back();
 }
 
 //------------------------------------------------The Draggable Window pop ups-------------------------------------------------
@@ -212,3 +230,4 @@ function handleWindowDrag(e){
     window.addEventListener("mousemove", mouseMoveEventHandler);
     window.addEventListener("mouseup", mouseUpEventHandler);
 }
+

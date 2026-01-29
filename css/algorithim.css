@@ -163,7 +163,7 @@ header{
 #spaceHolderDiv{
     flex-grow: 1;
 }
-#helpButton, #descriptionButton, #showCodeButton{
+#helpButton, #descriptionButton, #showCodeButton, #inputButton{
     max-width: 40px;
     max-height: 40px;
     margin-left: 10px;
@@ -178,7 +178,7 @@ header{
     border-color: white;
     border-style: solid;  
 }
-#dropUpImage, #helpImage, #descriptionImage, #codeImage{
+#dropUpImage, #helpImage, #descriptionImage, #codeImage, #inputImage{
     width:  100%;
     height: 100%;
     object-fit: fill;
@@ -213,10 +213,10 @@ header{
     font-size: 14px;
 }
 
-/*---------------------------------------------The description floating window----------------------------------------------------->*/
+/*---------------------------------------------The floating windows----------------------------------------------------->*/
 
 #mainDescriptionWindow, #helpWindow, #codeWindow, #inputWindow{
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
