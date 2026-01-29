@@ -51,3 +51,23 @@ searchBar.addEventListener('input', function(e)
 document.querySelector('.searchBar').addEventListener('submit', function(e) {
     e.preventDefault();
 });
+
+
+//Send over other query data to the next side
+
+//for each button add in the click handler function
+buttons.forEach(button => {
+    //add event listener
+    button.addEventListener("click", ()=>{
+        const titleSpan = button.querySelector(".algTitle");
+        const actualName = titleSpan.textContent.toLowerCase().trim();
+        handleClick(actualName)
+    }) ;
+});
+
+//function to handle sending data dn redirecting
+function handleClick(functionName)
+{
+    console.log(functionName);
+    window.location.href = `algorithim.html?name=${encodeURIComponent(functionName)}`;
+}

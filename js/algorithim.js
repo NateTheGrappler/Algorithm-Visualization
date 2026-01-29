@@ -10,6 +10,7 @@ class algorithimVisualizer{
         this.minVal = document.getElementById("minValue");
         this.maxVal = document.getElementById("maxValue");
         this.numberOfElements = document.getElementById("nInput");
+        this.arrayName = "";
 
         //status
         this.comparisions = 0;
@@ -27,6 +28,7 @@ class algorithimVisualizer{
     {
         this.generateArray();
         this.renderArray();
+        this.getArrayName();
     }
 
     setUpButtons()
@@ -82,6 +84,12 @@ class algorithimVisualizer{
             //add the element to the arrayContainer
             this.arrayContainer.appendChild(element);
         });
+    }
+    getArrayName()
+    {
+        const urlParams = new URLSearchParams(window.location.search);
+        this.arrayName = decodeURIComponent(urlParams.get('name') || "");
+        console.log(this.arrayName);
     }
 
 
