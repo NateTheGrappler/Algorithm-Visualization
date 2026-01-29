@@ -93,6 +93,9 @@ class algorithimVisualizer{
         {
             this.generateButtonClick();
         })
+
+        //the top buttons for extra info and such
+
     }
     generateButtonClick()
     {
@@ -138,9 +141,25 @@ function hideHeader()
 
 //get the tops of the windows, the ones you click and drag on
 const descriptionTop = document.getElementById("descriptionTopBar");
+const helpTop = document.getElementById("helpTopBar");
+const codeTop = document.getElementById("codeTopBar");
+const inputTop = document.getElementById("inputTopBar");
+let currentZIndex = 10;
 
 descriptionTop.addEventListener("mousedown", (e) =>{
-    
+    handleWindowDrag(e);
+});
+helpTop.addEventListener("mousedown", (e) =>{
+    handleWindowDrag(e);
+});
+codeTop.addEventListener("mousedown", (e) =>{
+    handleWindowDrag(e);
+});
+inputTop.addEventListener("mousedown", (e) =>{
+    handleWindowDrag(e);
+});
+
+function handleWindowDrag(e){
     //get the parent element of the thing that is clicked on
     let parentElement = e.target.parentElement;
     let parentBox = parentElement.getBoundingClientRect();
@@ -148,6 +167,10 @@ descriptionTop.addEventListener("mousedown", (e) =>{
     //set previous position
     let prevX = e.clientX;
     let prevY = e.clientY;
+
+    //set the window element to go on top of all others
+    currentZIndex ++;
+    parentElement.style.zIndex = currentZIndex;
 
     //define the functions to handle the other event listeners
     function mouseUpEventHandler()
@@ -179,7 +202,5 @@ descriptionTop.addEventListener("mousedown", (e) =>{
 
     //add the other event listeners
     window.addEventListener("mousemove", mouseMoveEventHandler);
-    window.addEventListener("mouseup", mouseUpEventHandler)
-    
-    
-});
+    window.addEventListener("mouseup", mouseUpEventHandler);
+}
