@@ -146,6 +146,41 @@ class algorithimVisualizer{
             image.src = this.algData.urlCPP;
         });
 
+        //the generate array window button
+        document.getElementById("generateInputButton").addEventListener('click', ()=>{
+
+            //parse and get the input from the user
+            const inputBar = document.getElementById('arrayInput');
+            const successMessage = document.getElementById('successMessage');
+            let newArray = inputBar.value.split(",");
+            let intArray = [];
+
+            //loop over each of the items in the array to check if they are an int
+            newArray.forEach((item, index) =>{
+                const trimmedItem = item.trim();  
+                if (/^-?\d+$/.test(trimmedItem)) 
+                {
+                    console.log(`Item at index ${index} is an integer: ${trimmedItem}`);
+                    intArray.push(parseInt(trimmedItem, 10));
+                    
+                } 
+                else 
+                {
+                    successMessage.textContent = "Unable to successfully generate last inputted array";
+                    return;
+                }            
+            })
+
+            //update message to reflect success or not
+            successMessage.textContent = "Your last inputted array was successfully generated."
+            this.array = intArray;
+            this.minVal.value = Math.min(...intArray);
+            this.maxVal.value = Math.max(...intArray);
+            this.numberOfElements.value = intArray.length;
+            this.renderArray();
+
+        })
+
 
     }
     generateButtonClick()

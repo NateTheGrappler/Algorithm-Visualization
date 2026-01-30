@@ -437,3 +437,26 @@ header{
     background-color: #1e1e1e;
     padding: 10px;
 }
+#inputTitle{
+    color: #1a1a2e;
+    text-align: center;
+    margin: 5px;
+}
+#arrayInput{
+    margin-left: 5px;
+    margin-top: 10px;
+}
+#successMessage{
+    display: block;
+    background-color: red;
+    text-align: center;
+    font-weight: bold;
+    height: auto;
+    padding: 10px;
+    margin: 10px;
+    margin-top: 20px;
+    border-radius: 10px;
+    background-color: #414a5b;
+    color: #000000;
+    text-wrap: wrap;
+}
