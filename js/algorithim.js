@@ -1,3 +1,11 @@
+//the dictionary that holds all of the data to fill in 
+const algorithmDictionary = 
+{   'bubble sort' : {name : 'Bubble Sort', timeComplexity : "O(n^2)", spaceComplexity : "O(1)", shortDescription : "The starter algorithm that is probably the most well known. It is one of the slowest, and generally used for smaller data sets", urlPython: "something", urlJS : "something", urlCPP : "something",
+    fullDescription : "This algorithm takes starts at the first element in the array, and then checks the adjacent one to see which one is bigger. It then swaps the first element if it is bigger than the one in front of it. Otherwise, it moves on to the adjacent element and checks the one that" +
+    "comes after. It cycles through the entire array like this, until it gets to the largest element in the array and takes it all the way to the back. It does this for each element until all of them are in order."}
+};
+
+
 //---------------------------------------------The Actual Visualization Class--------------------------------------------------
 class algorithimVisualizer{
 
@@ -29,6 +37,7 @@ class algorithimVisualizer{
         this.generateArray();
         this.renderArray();
         this.getArrayName();
+        this.fillInDescription();
     }
 
     //------------------------------------Array related functions-----------------------------
@@ -84,6 +93,7 @@ class algorithimVisualizer{
     {
         const urlParams = new URLSearchParams(window.location.search);
         this.arrayName = decodeURIComponent(urlParams.get('name') || "");
+        //console.log(this.arrayName);
     }
 
 
@@ -101,6 +111,10 @@ class algorithimVisualizer{
         document.getElementById("descriptionButton").addEventListener('click', () => {handleWindowClick(descriptionWindow)});
         document.getElementById("showCodeButton").addEventListener('click', () => {handleWindowClick(codeWindow)})
         document.getElementById("inputButton").addEventListener('click', () => {handleWindowClick(inputWindow)});
+        document.getElementById("closeHelp").addEventListener('click', () => {handleWindowClick(helpWindow)});
+        document.getElementById("closeCode").addEventListener('click', () => {handleWindowClick(codeWindow)});
+        document.getElementById("closeInput").addEventListener('click', () => {handleWindowClick(inputWindow)});
+        document.getElementById("closeDescription").addEventListener('click', () => {handleWindowClick(descriptionWindow)});
         function handleWindowClick(window)
         {
             console.log("RAN HERE");
@@ -128,6 +142,28 @@ class algorithimVisualizer{
         //generate the array and also rerender it
         this.generateArray();
         this.renderArray();
+    }
+
+
+    //functions to populate the webpage information
+    fillInDescription()
+    {
+        //get all of the html elements you want to change
+        const headerTitle       = document.getElementById("headerText");
+        const headerDesc        = document.getElementById("headerDescription");
+        const windowDescription = document.getElementById("fullDescription");
+        const timeComplexity    = document.getElementById("timeComplexity");
+        const spaceComplexity   = document.getElementById("spaceComplexity");
+
+        //get the information from the big map
+        const algorithm = algorithmDictionary[this.arrayName];
+        
+        //fill in all of the information
+        headerTitle.textContent       = algorithm.name;       
+        headerDesc.textContent        = algorithm.shortDescription;
+        windowDescription.textContent = algorithm.fullDescription;
+        timeComplexity.textContent    = "Time Complexity: " + algorithm.timeComplexity;
+        spaceComplexity.textContent   = "Space Complexity: " + algorithm.spaceComplexity;
     }
 
 }
@@ -170,6 +206,14 @@ const descriptionTop = document.getElementById("descriptionTopBar");
 const helpTop = document.getElementById("helpTopBar");
 const codeTop = document.getElementById("codeTopBar");
 const inputTop = document.getElementById("inputTopBar");
+
+const descriptionBody = document.getElementById("descriptionBody");
+const helpBody = document.getElementById("helpBody");
+const codeBody = document.getElementById("codeBody");
+const inputBody = document.getElementById("inputBody");
+
+const descriptionName = document.getElementById("descriptionName");
+
 let currentZIndex = 10;
 
 descriptionTop.addEventListener("mousedown", (e) =>{
@@ -184,6 +228,19 @@ codeTop.addEventListener("mousedown", (e) =>{
 inputTop.addEventListener("mousedown", (e) =>{
     handleWindowDrag(e);
 });
+descriptionBody.addEventListener("mousedown", (e) =>{
+    handleWindowDrag(e);
+});
+helpBody.addEventListener("mousedown", (e) =>{
+    handleWindowDrag(e);
+});
+codeBody.addEventListener("mousedown", (e) =>{
+    handleWindowDrag(e);
+});
+inputBody.addEventListener("mousedown", (e) =>{
+    handleWindowDrag(e);
+});
+
 
 function handleWindowDrag(e){
     //get the parent element of the thing that is clicked on
@@ -230,4 +287,3 @@ function handleWindowDrag(e){
     window.addEventListener("mousemove", mouseMoveEventHandler);
     window.addEventListener("mouseup", mouseUpEventHandler);
 }
-

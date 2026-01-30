@@ -25,7 +25,7 @@
 
             <!--The Div to hold the -->
             <div id="descriptionDiv">
-                <p>Algorithm description would go here. it talks about how the given sorting alg works and how fast it would be.</p>
+                <p id="headerDescription">Algorithm description would go here. it talks about how the given sorting alg works and how fast it would be.</p>
             </div>
 
         </header>
@@ -60,7 +60,7 @@
                     </button>
 
                     <button  id="inputButton"> <!--Input your own array-->
-                        <svg id="inputImage" xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#e3e3e3"><path d="m379-343 44-44-93-93 92-92-44-44-136 136 137 137Zm202 0 137-137-137-137-44 44 93 93-93 93 44 44ZM180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h600q24 0 42 18t18 42v600q0 24-18 42t-42 18H180Zm0-60h600v-600H180v600Zm0-600v600-600Z"/></svg>
+                        <svg id="inputImage" xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#e3e3e3"><path d="M140-160q-24 0-42-18t-18-42v-169h60v169h680v-520H140v171H80v-171q0-24 18-42t42-18h680q24 0 42 18t18 42v520q0 24-18 42t-42 18H140Zm319-143-43-43 103-103H80v-60h439L416-612l43-43 176 176-176 176Z"/></svg>
                     </button>
                 </div>
 
@@ -99,12 +99,17 @@
 
             <!--The top bar div-->
             <div id="descriptionTopBar">
-                <div>Description</div>
+                <div class = "topBarName" id="descriptionName">Description</div>
+                <div class = "closeButtonDiv">
+                    <button id = "closeDescription"> X </button>                    
+                </div>
             </div>
 
             <!--The main body of the window div-->
             <div id="descriptionBody">
-
+                <div id="timeComplexity">Some Filler: O(n^2)</div>
+                <div id="spaceComplexity">Some Filler: O(n^2)</div>
+                <p id = "fullDescription">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi itaque voluptates at, minus minima qui aperiam quia. Nostrum repellendus ipsa odio, magnam, esse nihil accusamus placeat repellat, dolorum cupiditate perspiciatis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo eos quam officiis recusandae quibusdam pariatur veritatis consequatur. Eveniet non optio, libero voluptates necessitatibus commodi laboriosam harum expedita magni corrupti? Quo? Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam voluptatum placeat assumenda repellendus. Debitis totam nihil rerum, esse culpa minus optio magni! Placeat quod, dignissimos aperiam facilis minima alias modi?</p>
             </div>
 
         </div>
@@ -113,13 +118,14 @@
 
             <!--The top bar div-->
             <div id="helpTopBar">
-                <div>Description</div>
+                <div class = "topBarName" id="helpName">How To Use</div>
+                <div class = "closeButtonDiv">
+                    <button id = "closeHelp"> X </button>
+                </div>
             </div>
 
             <!--The main body of the window div-->
-            <div id="helpBody">
-
-            </div>
+            <div id="helpBody"></div>
 
         </div>
 
@@ -127,12 +133,17 @@
 
             <!--The top bar div-->
             <div id="codeTopBar">
-                <div>Description</div>
+                <button>Python</button>
+                <button>JavaScript</button>
+                <button>C++</button>
+                <div class = "closeButtonDiv">
+                    <button id = "closeCode"> X </button>
+                </div>                
             </div>
 
             <!--The main body of the window div-->
             <div id="codeBody">
-
+                <img id="codeImage" src="" alt="Image of code for a given coding language">
             </div>
 
         </div>
@@ -141,7 +152,10 @@
 
             <!--The top bar div-->
             <div id="inputTopBar">
-                <div>Description</div>
+                <div class = "topBarName" id="inputName">Input Array</div>
+                <div class = "closeButtonDiv">
+                    <button id = "closeInput"> X </button>
+                </div>                
             </div>
 
             <!--The main body of the window div-->
