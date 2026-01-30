@@ -231,6 +231,10 @@ header{
     z-index: 10;
     overflow: hidden;
 }
+#codeWindow{
+    width: 400px; 
+    height: 350px; /* Increased from 350px */
+}
 
 /*-The description window inner style-*/
 #descriptionTopBar{
@@ -298,6 +302,10 @@ header{
     height: 15%;
 }
 #codeBody{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
     width: 100%;
     flex-grow: 1;
     height: calc(100% - 15%);
@@ -369,6 +377,22 @@ header{
 #inputName{
     background-color: transparent;
 }
+.topBarButton{
+    border-radius: 10px;
+    height: 50%;
+    width: 33%;
+    margin-left: 10px;
+    border: 2px solid white;
+}
+#pythonButton{
+    background-color: rgb(156, 244, 97);
+}
+#jsButton{
+    background-color: rgb(236, 101, 101);
+}
+#cppButton{
+    background-color: rgb(226, 180, 101);
+}
 
 /*The actual bodies for the windows*/
 #timeComplexity{
@@ -399,11 +423,17 @@ header{
     -ms-overflow-style: none; 
     scrollbar-width: none;
 }  
-
 .helpImage{
     width: 100%;
     min-height: 30px;
 }
-
-
-
+#codeExampleImage {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #1e1e1e;
+    padding: 10px;
+}

@@ -1,6 +1,6 @@
 //the dictionary that holds all of the data to fill in 
 const algorithmDictionary = 
-{   'bubble sort' : {name : 'Bubble Sort', timeComplexity : "O(n^2)", spaceComplexity : "O(1)", shortDescription : "The starter algorithm that is probably the most well known. It is one of the slowest, and generally used for smaller data sets", urlPython: "something", urlJS : "something", urlCPP : "something",
+{   'bubble sort' : {name : 'Bubble Sort', timeComplexity : "O(n^2)", spaceComplexity : "O(1)", shortDescription : "The starter algorithm that is probably the most well known. It is one of the slowest, and generally used for smaller data sets", urlPython: "Images/bubbleSort/python.png", urlJS : "Images/bubbleSort/javascript.png", urlCPP : "Images/bubbleSort/cpp.png",
     fullDescription : "This algorithm takes starts at the first element in the array, and then checks the adjacent one to see which one is bigger. It then swaps the first element if it is bigger than the one in front of it. Otherwise, it moves on to the adjacent element and checks the one that" +
     "comes after. It cycles through the entire array like this, until it gets to the largest element in the array and takes it all the way to the back. It does this for each element until all of them are in order."}
 };
@@ -19,6 +19,7 @@ class algorithimVisualizer{
         this.maxVal = document.getElementById("maxValue");
         this.numberOfElements = document.getElementById("nInput");
         this.arrayName = "";
+        this.algData = algorithmDictionary[""];
 
         //status
         this.comparisions = 0;
@@ -131,6 +132,20 @@ class algorithimVisualizer{
             backButtonClick();
         });
 
+        //the buttons in the show code window
+        document.getElementById("pythonButton").addEventListener('click', () =>{
+            const image = document.getElementById("codeExampleImage");
+            image.src = this.algData.urlPython;
+        });
+        document.getElementById("jsButton").addEventListener('click', () =>{
+            const image = document.getElementById("codeExampleImage");
+            image.src = this.algData.urlJS;
+        });
+        document.getElementById("cppButton").addEventListener('click', () =>{
+            const image = document.getElementById("codeExampleImage");
+            image.src = this.algData.urlCPP;
+        });
+
 
     }
     generateButtonClick()
@@ -157,6 +172,7 @@ class algorithimVisualizer{
 
         //get the information from the big map
         const algorithm = algorithmDictionary[this.arrayName];
+        this.algData = algorithm;
         
         //fill in all of the information
         headerTitle.textContent       = algorithm.name;       
