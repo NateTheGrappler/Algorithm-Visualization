@@ -18,6 +18,7 @@ class algorithimVisualizer{
         this.minVal = document.getElementById("minValue");
         this.maxVal = document.getElementById("maxValue");
         this.numberOfElements = document.getElementById("nInput");
+        this.speedSlider = document.getElementById("speedSlider");
         this.arrayName = "";
         this.algData = algorithmDictionary[""];
 
@@ -40,6 +41,26 @@ class algorithimVisualizer{
         this.getArrayName();
         this.fillInDescription();
     }
+    fillInDescription()
+    {
+        //get all of the html elements you want to change
+        const headerTitle       = document.getElementById("headerText");
+        const headerDesc        = document.getElementById("headerDescription");
+        const windowDescription = document.getElementById("fullDescription");
+        const timeComplexity    = document.getElementById("timeComplexity");
+        const spaceComplexity   = document.getElementById("spaceComplexity");
+
+        //get the information from the big map
+        const algorithm = algorithmDictionary[this.arrayName];
+        this.algData = algorithm;
+        
+        //fill in all of the information
+        headerTitle.textContent       = algorithm.name;       
+        headerDesc.textContent        = algorithm.shortDescription;
+        windowDescription.textContent = algorithm.fullDescription;
+        timeComplexity.textContent    = "Time Complexity: " + algorithm.timeComplexity;
+        spaceComplexity.textContent   = "Space Complexity: " + algorithm.spaceComplexity;
+    }
 
     //------------------------------------Array related functions-----------------------------
     generateArray()
@@ -57,7 +78,6 @@ class algorithimVisualizer{
 
         console.log(this.array);
     }
-
     renderArray() 
     {
         //clear the inner content of the arrayContainer
@@ -95,6 +115,10 @@ class algorithimVisualizer{
         const urlParams = new URLSearchParams(window.location.search);
         this.arrayName = decodeURIComponent(urlParams.get('name') || "");
         //console.log(this.arrayName);
+    }
+    async sleep(ms)
+    {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
 
@@ -181,6 +205,18 @@ class algorithimVisualizer{
 
         })
 
+        //the lower control buttons
+        document.getElementById("startButton").addEventListener('click', () =>
+        {
+            if(!this.isSorting)
+            {
+                this.bubbleSort();
+            }
+        })
+        this.speedSlider.addEventListener('input', (e) => {
+            this.animationSpeed = 100 - e.target.value;
+        });
+
 
     }
     generateButtonClick()
@@ -194,30 +230,79 @@ class algorithimVisualizer{
         this.renderArray();
     }
 
-
-    //functions to populate the webpage information
-    fillInDescription()
+    //---------------------------------------BubbleSort--------------------------------------
+    async bubbleSort()
     {
-        //get all of the html elements you want to change
-        const headerTitle       = document.getElementById("headerText");
-        const headerDesc        = document.getElementById("headerDescription");
-        const windowDescription = document.getElementById("fullDescription");
-        const timeComplexity    = document.getElementById("timeComplexity");
-        const spaceComplexity   = document.getElementById("spaceComplexity");
+        //update/check the sorting bool
+        if(this.isSorting) {return;} 
+        this.isSorting = true;
 
-        //get the information from the big map
-        const algorithm = algorithmDictionary[this.arrayName];
-        this.algData = algorithm;
-        
-        //fill in all of the information
-        headerTitle.textContent       = algorithm.name;       
-        headerDesc.textContent        = algorithm.shortDescription;
-        windowDescription.textContent = algorithm.fullDescription;
-        timeComplexity.textContent    = "Time Complexity: " + algorithm.timeComplexity;
-        spaceComplexity.textContent   = "Space Complexity: " + algorithm.spaceComplexity;
+        //actual logic for array
+        let n = this.array.length;
+        for(let i = 0; i < n-1; i++)
+        {
+            for(let j = 0; j < n-i-1; j++)
+            {
+                if(await this.compareElement(j, j+1))
+                {
+                    await this.swapElement(j, j+1);
+                }
+            }
+        }
+        console.log("Sorting has ended");
+        console.log(this.array);
+        this.isSorting=false
+    }
+
+    async compareElement(i, j)
+    {
+        const elementI = document.getElementById(`element-${i}`);
+        const elementJ = document.getElementById(`element-${j}`);
+
+        elementI.classList.add('comparing');
+        elementJ.classList.add('comparing');
+
+        //this.comparisions ++;
+        //await this.sleep(this.animationSpeed);
+
+        elementI.classList.remove('comparing');
+        elementJ.classList.remove('comparing');
+
+        return this.array[i] > this.array[j];
+
+    }
+    async swapElement(i, j)
+    {
+        //if(i === j) {return;}
+
+        const elementI = document.getElementById(`element-${i}`);
+        const elementJ = document.getElementById(`element-${j}`);
+
+        elementI.classList.add('swapping');
+        elementJ.classList.add('swapping');
+
+        //await this.sleep(this.animationSpeed * 2);
+
+        let largerValue    = this.array[i];
+        let smallerValue   = this.array[j];
+        this.array[i]      = smallerValue;
+        this.array[j]      = largerValue;
+
+        // Animate the swap
+        const tempHeight = elementI.style.height;
+        elementI.style.height = elementJ.style.height;
+        elementJ.style.height = tempHeight;
+
+        //await this.sleep(this.animationSpeed * 2); 
+
+        elementI.classList.remove('swapping');
+        elementJ.classList.remove('swapping');
     }
 
 }
+
+
+//--------------------------------------------------Non Class Section----------------------------------------------------------
 
 //when loading, create the class with all of the information
 document.addEventListener("DOMContentLoaded", ()=>

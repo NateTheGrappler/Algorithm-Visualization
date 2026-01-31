@@ -460,3 +460,15 @@ header{
     color: #000000;
     text-wrap: wrap;
 }
+
+/*Array classes for styling*/
+.array-element.comparing {
+    background: #e74c3c;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
+}
+
+.array-element.swapping {
+    background: #f39c12;
+    transform: translateY(-10px);
+}
