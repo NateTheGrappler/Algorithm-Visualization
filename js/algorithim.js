@@ -14,6 +14,7 @@ class algorithimVisualizer{
     {
         //array and other html buttons
         this.array = [];
+        this.resetArray = [];
         this.arrayContainer = document.getElementById("arrayShowcase");
         this.minVal = document.getElementById("minValue");
         this.maxVal = document.getElementById("maxValue");
@@ -73,10 +74,11 @@ class algorithimVisualizer{
         for(let i = 0; i < this.numberOfElements.value; i++)
         {
             //basically generate a random float from 0 to 1, then multiply it by the possible number of digits to create, then also add the min to it so it is never below the min
-            this.array.push(Math.floor((Math.random() * max - min + 1) + min));
+            this.array.push(Math.floor(Math.random() * (max - min + 1) + min));
         }
 
-        console.log(this.array);
+        this.resetArray = [...this.array];
+        console.log(this.resetArray);
     }
     renderArray() 
     {
@@ -213,6 +215,32 @@ class algorithimVisualizer{
                 this.bubbleSort();
             }
         })
+        document.getElementById("pauseButton").addEventListener('click', () =>
+        {
+            const button = document.getElementById("pauseButton");
+            if(button.textContent == "Pause")
+            {
+                button.textContent = "Resume";
+                this.isSorting = false;
+            }
+            else
+            {
+                button.textContent = "Pause";
+                document.getElementById("startButton").click();
+            }
+        })
+        document.getElementById("stopButton").addEventListener('click', () =>
+        {
+            this.isSorting = false;
+        })
+        document.getElementById("resetButton").addEventListener('click', () =>
+        {
+            console.log("ran here");
+            this.array.length = 0;
+            this.array = [...this.resetArray];
+            this.renderArray();
+            this.isSorting=false;
+        })
         this.speedSlider.addEventListener('input', (e) => {
             this.animationSpeed = 100 - e.target.value;
         });
@@ -243,6 +271,10 @@ class algorithimVisualizer{
         {
             for(let j = 0; j < n-i-1; j++)
             {
+                if(!this.isSorting)
+                {
+                    break;
+                }
                 if(await this.compareElement(j, j+1))
                 {
                     await this.swapElement(j, j+1);
@@ -253,7 +285,6 @@ class algorithimVisualizer{
         console.log(this.array);
         this.isSorting=false
     }
-
     async compareElement(i, j)
     {
         const elementI = document.getElementById(`element-${i}`);
@@ -263,7 +294,7 @@ class algorithimVisualizer{
         elementJ.classList.add('comparing');
 
         //this.comparisions ++;
-        //await this.sleep(this.animationSpeed);
+        await this.sleep(this.animationSpeed);
 
         elementI.classList.remove('comparing');
         elementJ.classList.remove('comparing');
