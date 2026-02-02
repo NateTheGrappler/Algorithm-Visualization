@@ -304,13 +304,14 @@ header{
 #codeBody{
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     padding: 5px;
     width: 100%;
     flex-grow: 1;
     height: calc(100% - 15%);
     background-color: #252526;;
     border-radius: 0px 0px 20px 20px;
+    overflow-y: scroll;
 }
 
 /*-The input your own alg window inner style-*/
@@ -429,8 +430,6 @@ header{
 }
 #codeExampleImage {
     width: 100%;
-    height: auto;
-    max-height: 100%;
     object-fit: contain;
     border-radius: 5px;
     border: 1px solid #444;
@@ -470,5 +469,10 @@ header{
 
 .array-element.swapping {
     background: #f39c12;
+    transform: translateY(-10px);
+}
+.array-element.sorted {
+    background: #ff0000;
+    border-color: #ff0000;
     transform: translateY(-10px);
 }

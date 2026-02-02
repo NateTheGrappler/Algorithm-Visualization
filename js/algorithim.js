@@ -1,8 +1,13 @@
 //the dictionary that holds all of the data to fill in 
 const algorithmDictionary = 
-{   'bubble sort' : {name : 'Bubble Sort', timeComplexity : "O(n^2)", spaceComplexity : "O(1)", shortDescription : "The starter algorithm that is probably the most well known. It is one of the slowest, and generally used for smaller data sets", urlPython: "Images/bubbleSort/python.png", urlJS : "Images/bubbleSort/javascript.png", urlCPP : "Images/bubbleSort/cpp.png",
+{   'bubble sort' : {name : 'Bubble Sort : O(n^2) : O(1)', timeComplexity : "O(n^2)", spaceComplexity : "O(1)", shortDescription : "The starter algorithm that is probably the most well known. It is one of the slowest, and generally used for smaller data sets", urlPython: "Images/bubbleSort/python.png", urlJS : "Images/bubbleSort/javascript.png", urlCPP : "Images/bubbleSort/cpp.png",
     fullDescription : "This algorithm takes starts at the first element in the array, and then checks the adjacent one to see which one is bigger. It then swaps the first element if it is bigger than the one in front of it. Otherwise, it moves on to the adjacent element and checks the one that" +
-    "comes after. It cycles through the entire array like this, until it gets to the largest element in the array and takes it all the way to the back. It does this for each element until all of them are in order."}
+    "comes after. It cycles through the entire array like this, until it gets to the largest element in the array and takes it all the way to the back. It does this for each element until all of them are in order."},
+    
+    'merge sort' : {name : 'Merge Sort : O(nlog(n)) : O(n)', timeComplexity : "O(nlog(n))", spaceComplexity : "O(n)", shortDescription : "Recursively splits the data into smaller halves and then merges them while sorting. Very fast in theory, but slower on smaller data sets due to large space complexity.", urlPython: "Images/mergeSort/python.png", urlJS : "Images/mergeSort/javascript.png", urlCPP : "Images/mergeSort/cpp.png",
+    fullDescription : "Merge sort recursively calls itself in a log(n) fashion. It first takes the array, finds it's middle, and then splits the array into two new smaller half arrays. It then continuously calls this same splitting function on these other halves. This is done " +
+    "until there is a n number of lists all containing a single one of the elements. This is when the function has to go forth to call it's helper function, as a means to merge the arrays. This function uses a while loop in order to iterate over the two arrays inputted, and tests each element to see which is larger or smaller. It does so until the entire lists have been gone through, which is " + 
+    "the explanation for the n part of the nlog(n) time complexity. However, after merging, it looks through the arrays to see if there are any other left over values, and appends them to the main return array. Returning a fully sorted array."}
 };
 
 
@@ -212,7 +217,7 @@ class algorithimVisualizer{
         {
             if(!this.isSorting)
             {
-                this.bubbleSort();
+                this.mergeSortSetup();
             }
         })
         document.getElementById("pauseButton").addEventListener('click', () =>
@@ -240,11 +245,11 @@ class algorithimVisualizer{
             this.array = [...this.resetArray];
             this.renderArray();
             this.isSorting=false;
+            this.resetElementColor();
         })
         this.speedSlider.addEventListener('input', (e) => {
-            this.animationSpeed = 100 - e.target.value;
+            this.animationSpeed = 501 - e.target.value;
         });
-
 
     }
     generateButtonClick()
@@ -328,6 +333,174 @@ class algorithimVisualizer{
 
         elementI.classList.remove('swapping');
         elementJ.classList.remove('swapping');
+    }
+    //--------------------------------------MergeSort----------------------------------------
+    
+    async mergeSortSetup()
+    {
+        if(this.isSorting) {return;}
+        this.isSorting = true;
+
+        //set all elements to default
+        this.resetElementColor();
+
+        //actual sorter call
+        await this.mergeSort(0, this.array.length-1);
+
+        //marked all of them as sorted when done
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.classList.add('sorted');
+            await this.sleep(10);
+        }    
+
+        this.isSorting = false;
+    }
+    async mergeSort(left, right)
+    {
+        if(left >= right || !this.isSorting) {return;}
+        
+        //get the middle index of the function
+        const mid = Math.floor((left+right) / 2)
+        
+        //recursive call to split down elements into single lists
+        await this.mergeSort(left, mid);
+        if (!this.isSorting) return;
+
+        await this.mergeSort(mid + 1, right);
+        if (!this.isSorting) return;
+
+        //call merge function (where the actual animation happens)
+        await this.mergeSortHelper(left, mid, right);
+    }
+    async mergeSortHelper(left, mid, right)
+    {
+        if (left > mid || mid >= right) return;
+
+        //set up arrays
+        const leftArray = this.array.slice(left, mid+1);
+        const rightArray = this.array.slice(mid+1, right+1);
+
+        //set up iterative values
+        let i = 0, j = 0, k = left;
+
+        //the actual animation bit
+        await this.highlightArea(left, right, '#e74c3c');
+
+        while(i<leftArray.length && j < rightArray.length && this.isSorting)
+        {
+            //the animation for the merge
+            const actualIndexI = left+i;
+            const actualIndexJ = mid+1+j;
+            await this.highlightCompare(actualIndexI, actualIndexJ);
+
+            //the actual merge bit within the array
+            if(leftArray[i] < rightArray[j])
+            {
+                this.array[k] = leftArray[i];
+                i++;
+            }
+            else
+            {
+                this.array[k] = rightArray[j];
+                j++;                
+            }
+
+            //update visuals
+            await this.updateElementHeight(k);
+            this.highlightElement(k, '#bd1300');
+            //await this.sleep(this.animationSpeed / 2);
+            k++;
+        }
+
+        while(i < leftArray.length && this.isSorting)
+        {
+            //update element to append extra and reflect that in graph
+            this.array[k] = leftArray[i];
+            await this.updateElementHeight(k);
+            this.highlightElement(k, '#bd1300');
+            await this.sleep(this.animationSpeed / 3);
+            i++; k++;
+        }
+        while(j < rightArray.length && this.isSorting)
+        {
+            //update element to append extra and reflect that in graph
+            this.array[k] = rightArray[j];
+            await this.updateElementHeight(k);
+            this.highlightElement(k, '#6a2c25');
+            await this.sleep(this.animationSpeed / 3);
+            j++; k++;
+        }
+
+        //reset the highlight
+        this.removeHighlightedArea(left, right);
+
+    }
+    async highlightArea(start, end, color)
+    {
+        for (let i = start; i <= end; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.style.backgroundColor = color;
+            element.style.borderColor = color;
+            element.style.opacity = '0.8';
+        }
+        await this.sleep(this.animationSpeed);
+    }
+    removeHighlightedArea(start, end)
+    {
+        for(let i = start; i <= end; i++)
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.style.backgroundColor = '';
+            element.style.borderColor = '';
+            element.style.opacity = '1';
+        }
+    }
+    async highlightCompare(i, j)
+    {
+        const elementI = document.getElementById(`element-${i}`);
+        const elementJ = document.getElementById(`element-${j}`);
+        
+        elementI.style.backgroundColor = '#ff1900';
+        elementJ.style.backgroundColor = '#ff1900';
+        elementI.style.borderColor     = '#ff1900';
+        elementJ.style.borderColor     = '#ff1900';
+        
+        await this.sleep(this.animationSpeed);
+        
+        elementI.style.backgroundColor = '';
+        elementJ.style.backgroundColor = '';
+        elementI.style.borderColor = '';
+        elementJ.style.borderColor = '';
+    }
+    highlightElement(index, color)
+    {
+        const element = document.getElementById(`element-${index}`);
+        element.style.backgroundColor = color;
+        element.style.borderColor = color;
+    }
+    async updateElementHeight(index)
+    {
+        const element = document.getElementById(`element-${index}`);
+        const maxValue = Math.max(...this.array);
+        const containerHeight = parseInt(window.getComputedStyle(this.arrayContainer).height);
+        const newHeight = (this.array[index] / maxValue) * (containerHeight * 0.95);
+
+        element.style.height = `${newHeight}px`;
+        await this.sleep(this.animationSpeed / 3);
+    }
+    resetElementColor()
+    {
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.style.backgroundColor = '';
+            element.style.borderColor = '';
+            element.style.opacity = '1';
+            element.classList.remove('sorted', 'comparing', 'swapping');
+        }
     }
 
 }
