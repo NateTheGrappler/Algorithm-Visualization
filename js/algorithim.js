@@ -7,7 +7,12 @@ const algorithmDictionary =
     'merge sort' : {name : 'Merge Sort : O(nlog(n)) : O(n)', timeComplexity : "O(nlog(n))", spaceComplexity : "O(n)", shortDescription : "Recursively splits the data into smaller halves and then merges them while sorting. Very fast in theory, but slower on smaller data sets due to large space complexity.", urlPython: "Images/mergeSort/python.png", urlJS : "Images/mergeSort/javascript.png", urlCPP : "Images/mergeSort/cpp.png",
     fullDescription : "Merge sort recursively calls itself in a log(n) fashion. It first takes the array, finds it's middle, and then splits the array into two new smaller half arrays. It then continuously calls this same splitting function on these other halves. This is done " +
     "until there is a n number of lists all containing a single one of the elements. This is when the function has to go forth to call it's helper function, as a means to merge the arrays. This function uses a while loop in order to iterate over the two arrays inputted, and tests each element to see which is larger or smaller. It does so until the entire lists have been gone through, which is " + 
-    "the explanation for the n part of the nlog(n) time complexity. However, after merging, it looks through the arrays to see if there are any other left over values, and appends them to the main return array. Returning a fully sorted array."}
+    "the explanation for the n part of the nlog(n) time complexity. However, after merging, it looks through the arrays to see if there are any other left over values, and appends them to the main return array. Returning a fully sorted array."},
+
+    'quick sort' : {name : 'Quick Sort : O(nlog(n)) : O(log(n))', timeComplexity : "O(nlog(n))", spaceComplexity : "O(log(n))", shortDescription : "Sets a pivot element and then sorts based on smaller or larger than said pivot. It does so recursively, working like merge sort, but just in place.", urlPython: "Images/quickSort/python.png", urlJS : "Images/quickSort/javascript.png", urlCPP : "Images/quickSort/cpp.png", 
+    fullDescription: "This sorting algorithm works very similarly to merge sort, in the sense that it recursively splits the array into halves. However, where quick and merge sort differ is in their space complexity. Quick sort sorts the array in place. Meaning it does not need to create a new array constantly in order to sort the array. This is done by setting the last element of the array to"+
+    " a 'pivot' element. Then, you create two indexes, j = 0, and i = -1. You compare the element at index j to that of the pivot element, if the pivot element is smaller, you increment j and try again. However, if the element is smaller than j, you increment i by one, and then swap the elements at index j and i. When j has run through the loop, you take the pivot element and put it in the index of i+1. " +
+    "This makes it so all elements less than the pivot are on the left, and all larger ones are on the right. You then split the array in two, and repeat the whole process on the left side of the array. Recursively creating a new pivot and new idex. This is repeated until the array is sorted. Leading to a time complexity of O(nlog(n)), but only a space complexity of O(log(n)." }
 };
 
 
@@ -217,7 +222,10 @@ class algorithimVisualizer{
         {
             if(!this.isSorting)
             {
-                this.mergeSortSetup();
+                console.log(this.arrayName);
+                if(this.arrayName == "bubble sort")     { this.bubbleSort(); }
+                else if(this.arrayName == "merge sort") { this.mergeSortSetup(); }
+                else if(this.arrayName == "quick sort") { this.quickSortStartUp(); }
             }
         })
         document.getElementById("pauseButton").addEventListener('click', () =>
@@ -240,18 +248,19 @@ class algorithimVisualizer{
         })
         document.getElementById("resetButton").addEventListener('click', () =>
         {
-            console.log("ran here");
+
             this.array.length = 0;
             this.array = [...this.resetArray];
+            this.resetElementColor();
             this.renderArray();
             this.isSorting=false;
-            this.resetElementColor();
         })
         this.speedSlider.addEventListener('input', (e) => {
             this.animationSpeed = 501 - e.target.value;
         });
 
     }
+
     generateButtonClick()
     {
         //get the min and max value just in case they have changed
@@ -446,7 +455,7 @@ class algorithimVisualizer{
             element.style.borderColor = color;
             element.style.opacity = '0.8';
         }
-        await this.sleep(this.animationSpeed);
+        await this.sleep(this.animationSpeed/3);
     }
     removeHighlightedArea(start, end)
     {
@@ -468,7 +477,7 @@ class algorithimVisualizer{
         elementI.style.borderColor     = '#ff1900';
         elementJ.style.borderColor     = '#ff1900';
         
-        await this.sleep(this.animationSpeed);
+        await this.sleep(this.animationSpeed / 3);
         
         elementI.style.backgroundColor = '';
         elementJ.style.backgroundColor = '';
@@ -503,7 +512,151 @@ class algorithimVisualizer{
         }
     }
 
+    //-----------------------------------QuickSort-----------------------------------------------
+    async quickSortStartUp()
+    {
+        if(this.isSorting) {return;}
+        this.isSorting = true;
+
+        //set all elements to default
+        this.resetElementColor();
+
+        //actual sorter call
+        await this.quickSort(this.array, 0, this.array.length-1);
+
+        //marked all of them as sorted when done
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.classList.add('sorted');
+            await this.sleep(10);
+        }    
+
+        this.isSorting = false;
+
+
+    }
+    async quickSort(array, start, end)
+    {
+        //base case for recursion
+        if(start >= end || !this.isSorting)
+        {
+            return array;
+        }
+
+        //set up the new pivot
+        let pivot = await this.partition(array, start, end)
+        if(!this.isSorting) return array;
+
+
+        //recusrive call to sort
+        await this.quickSort(array, start, pivot-1);
+        if(!this.isSorting) return array;
+        await this.quickSort(array, pivot+1, end)
+    }
+    async partition(array, start, end)
+    {
+        //select and color in pivot
+        let pivot = array[end];
+        this.highlightPivot(end, '#03de19');
+        await this.sleep(this.animationSpeed);
+
+        let i = start - 1;
+
+        for(let j = start; j < end; j++)
+        {
+            if(!this.isSorting) {break;}
+
+            //set current element style
+            this.highlightCurrent(j, true);
+
+            //actual sorting logic where you highlight the sort, change the things in array, and update visual height
+            if(array[j] < pivot )
+            {
+                i++;
+                if(i !== j)
+                {
+                    await this.highlightSwapped(i);
+                    await this.highlightSwapped(j);
+
+                    let temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
+
+                    await this.updateElementHeight(i);
+                    await this.updateElementHeight(j);
+                    await this.sleep(this.animationSpeed / 2);  
+                }          
+            }
+            //reset the current element style but keep pivot
+            if(j !== end) { await this.resetOneElement(j);}
+        }
+
+        if(this.isSorting && i !== end)
+        {
+            i++;
+
+            await this.highlightSwapped(i);
+            await this.highlightSwapped(end);
+
+            let temp = array[i];
+            array[i] = array[end];
+            array[end] = temp;
+
+            await this.updateElementHeight(i);
+            await this.updateElementHeight(end);
+            await this.sleep(this.animationSpeed / 2);     
+        }
+  
+        await this.resetOneElement(end);
+        
+        const pivotElement = document.getElementById(`element-${end}`);
+        pivotElement.style.backgroundColor = '';
+        pivotElement.style.borderColor = '';
+
+        return i;
+    }
+    async highlightPivot(index, color)
+    {
+        const element = document.getElementById(`element-${index}`);
+        element.style.backgroundColor = color;
+        element.style.borderColor = color;
+        element.style.zIndex = '10';
+        element.style.boxShadow = `0 0 10px ${color}`;
+    }
+    async resetOneElement(index)
+    {
+        const element = document.getElementById(`element-${index}`);
+        element.style.backgroundColor = '';
+        element.style.borderColor = '';
+        element.style.zIndex = '';
+        element.style.boxShadow = '';
+    }
+    async highlightSwapped(index, color) 
+    {
+        const element = document.getElementById(`element-${index}`);
+        element.style.backgroundColor = color;
+        element.style.borderColor = color;
+        element.style.zIndex = '5';
+        await this.sleep(this.animationSpeed);
+        element.style.backgroundColor = '';
+        element.style.borderColor = '';
+        element.style.boxShadow = '';
+    } 
+    async highlightCurrent(index, isPartition = false) 
+    {
+        const element = document.getElementById(`element-${index}`);
+        element.style.backgroundColor = isPartition ? '#ff6b6b' : '#ff1900';
+        element.style.borderColor = isPartition ? '#ff6b6b' : '#ff1900';
+        element.style.zIndex = '5';
+        element.style.boxShadow = '0 0 5px rgba(255, 25, 0, 0.7)';
+    } 
 }
+
+
+
+
+
 
 
 //--------------------------------------------------Non Class Section----------------------------------------------------------
@@ -513,6 +666,14 @@ document.addEventListener("DOMContentLoaded", ()=>
 {
     new algorithimVisualizer();
 });
+
+
+
+
+
+
+
+
 
 //----------------------------------Code that handles the top portion of the array container-----------------------------------
 function hideHeader()
