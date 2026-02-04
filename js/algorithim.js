@@ -12,7 +12,10 @@ const algorithmDictionary =
     'quick sort' : {name : 'Quick Sort : O(nlog(n)) : O(log(n))', timeComplexity : "O(nlog(n))", spaceComplexity : "O(log(n))", shortDescription : "Sets a pivot element and then sorts based on smaller or larger than said pivot. It does so recursively, working like merge sort, but just in place.", urlPython: "Images/quickSort/python.png", urlJS : "Images/quickSort/javascript.png", urlCPP : "Images/quickSort/cpp.png", 
     fullDescription: "This sorting algorithm works very similarly to merge sort, in the sense that it recursively splits the array into halves. However, where quick and merge sort differ is in their space complexity. Quick sort sorts the array in place. Meaning it does not need to create a new array constantly in order to sort the array. This is done by setting the last element of the array to"+
     " a 'pivot' element. Then, you create two indexes, j = 0, and i = -1. You compare the element at index j to that of the pivot element, if the pivot element is smaller, you increment j and try again. However, if the element is smaller than j, you increment i by one, and then swap the elements at index j and i. When j has run through the loop, you take the pivot element and put it in the index of i+1. " +
-    "This makes it so all elements less than the pivot are on the left, and all larger ones are on the right. You then split the array in two, and repeat the whole process on the left side of the array. Recursively creating a new pivot and new idex. This is repeated until the array is sorted. Leading to a time complexity of O(nlog(n)), but only a space complexity of O(log(n)." }
+    "This makes it so all elements less than the pivot are on the left, and all larger ones are on the right. You then split the array in two, and repeat the whole process on the left side of the array. Recursively creating a new pivot and new idex. This is repeated until the array is sorted. Leading to a time complexity of O(nlog(n)), but only a space complexity of O(log(n)." },
+
+    'bogo sort' : {name: "Bogo Sort : O(n*n!) : O(1)", timeComplexity: "O(n*n!)", spaceComplexity: "O(1)", shortDescription : "The Best Sort.", urlPython: "Images/bogoSort/python.png", urlJS : "Images/bogoSort/javascript.png", urlCPP : "Images/bogoSort/cpp.png",
+    fullDescription: "The algorithm checks to see if the array is sorted, and then if it is not, it randomly shuffles it. After shuffling it checks once more, and so on and so forth until the array is sorted."}
 };
 
 
@@ -226,6 +229,7 @@ class algorithimVisualizer{
                 if(this.arrayName == "bubble sort")     { this.bubbleSort(); }
                 else if(this.arrayName == "merge sort") { this.mergeSortSetup(); }
                 else if(this.arrayName == "quick sort") { this.quickSortStartUp(); }
+                else if(this.arrayName == "bogo sort")  { this.bogoSortStartUp();}
             }
         })
         document.getElementById("pauseButton").addEventListener('click', () =>
@@ -651,6 +655,70 @@ class algorithimVisualizer{
         element.style.zIndex = '5';
         element.style.boxShadow = '0 0 5px rgba(255, 25, 0, 0.7)';
     } 
+
+    //---------------------------------Bogo Sort-------------------------------------------------
+    async bogoSortStartUp()
+    {
+        if(this.isSorting) {return;}
+        this.isSorting = true;
+
+        //set all elements to default
+        this.resetElementColor();
+
+        //actual sorter call
+        await this.bogoSort(this.array);
+
+        //marked all of them as sorted when done
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.classList.add('sorted');
+            await this.sleep(10);
+        }    
+
+        this.isSorting = false;
+    }
+    bogoSortChecker()
+    {
+        for(let i = 0; i < this.array.length-1; i++)
+        {
+            if(this.array[i] > this.array[i+1])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    async bogoSort()
+    {
+        while(!this.bogoSortChecker())
+        {
+            for(let i = 0; i < this.array.length; i++)
+            {
+                this.highlightElement(i, '#e50041');
+            }
+
+            await this.sleep(this.animationSpeed * 2);
+
+            for(let i = this.array.length-1; i >= 0; i--)
+            {
+                let j = Math.floor(Math.random() * i+1);
+                let temp = this.array[i];
+                this.array[i] = this.array[j];
+                this.array[j] = temp;
+
+                await this.updateElementHeight(i);
+                await this.updateElementHeight(j);
+
+                await this.sleep(this.animationSpeed / 2);
+
+            }
+
+            this.resetElementColor();
+            await this.sleep(200);
+        }
+    }
+
 }
 
 
