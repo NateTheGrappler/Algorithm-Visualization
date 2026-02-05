@@ -15,7 +15,11 @@ const algorithmDictionary =
     "This makes it so all elements less than the pivot are on the left, and all larger ones are on the right. You then split the array in two, and repeat the whole process on the left side of the array. Recursively creating a new pivot and new idex. This is repeated until the array is sorted. Leading to a time complexity of O(nlog(n)), but only a space complexity of O(log(n)." },
 
     'bogo sort' : {name: "Bogo Sort : O(n*n!) : O(1)", timeComplexity: "O(n*n!)", spaceComplexity: "O(1)", shortDescription : "The Best Sort.", urlPython: "Images/bogoSort/python.png", urlJS : "Images/bogoSort/javascript.png", urlCPP : "Images/bogoSort/cpp.png",
-    fullDescription: "The algorithm checks to see if the array is sorted, and then if it is not, it randomly shuffles it. After shuffling it checks once more, and so on and so forth until the array is sorted."}
+    fullDescription: "The algorithm checks to see if the array is sorted, and then if it is not, it randomly shuffles it. After shuffling it checks once more, and so on and so forth until the array is sorted."},
+
+    'selection sort' : {name: "Selection Sort : O(n^2) : O(1)", timeComplexity: "O(n^2)", spaceComplexity: "O(1)", shortDescription : "The most human sort, finding the smallest value, and the putting it in order", urlPython: "Images/selectionSort/python.png", urlJS : "Images/selectionSort/javascript.png", urlCPP : "Images/selectionSort/cpp.png",
+    fullDescription: "This sort is very similar to bubble sort, in that it is simple to implement, and that it runs in O(n^2) time. Overall, this algorithim sorts in place, meaning it does not create any new arrays etc. " + 
+    "Instead, the algorithm stores the index of the first 'non sorted' portion of the array, and then incrementiativly loops through the array to see if there a smaller value. Upon looping through the whole array, the smallest value found is swapped with the first element of the 'non sorted' array. Process is repeated with the rest of the array until sorted."}
 };
 
 
@@ -226,10 +230,11 @@ class algorithimVisualizer{
             if(!this.isSorting)
             {
                 console.log(this.arrayName);
-                if(this.arrayName == "bubble sort")     { this.bubbleSort(); }
-                else if(this.arrayName == "merge sort") { this.mergeSortSetup(); }
-                else if(this.arrayName == "quick sort") { this.quickSortStartUp(); }
-                else if(this.arrayName == "bogo sort")  { this.bogoSortStartUp();}
+                if(this.arrayName == "bubble sort")          { this.bubbleSort(); }
+                else if(this.arrayName == "merge sort")      { this.mergeSortSetup(); }
+                else if(this.arrayName == "quick sort")      { this.quickSortStartUp(); }
+                else if(this.arrayName == "bogo sort")       { this.bogoSortStartUp();}
+                else if(this.arrayName == "selection sort")  { this.selectionSortStartUp();}
             }
         })
         document.getElementById("pauseButton").addEventListener('click', () =>
@@ -716,6 +721,67 @@ class algorithimVisualizer{
 
             this.resetElementColor();
             await this.sleep(200);
+        }
+    }
+
+    //---------------------------------Selection Sort-------------------------------------------------
+    async selectionSortStartUp()
+    {
+        if(this.isSorting) {return;}
+        this.isSorting = true;
+
+        //set all elements to default
+        this.resetElementColor();
+
+        //actual sorter call
+        await this.selectionSort(this.array);
+
+        //marked all of them as sorted when done
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.classList.add('sorted');
+            await this.sleep(10);
+        }    
+
+        this.isSorting = false;
+    }
+    async selectionSort()
+    {
+        let n = this.array.length;
+        for(let i = 0; i < n-1; i++)
+        {
+            let index = i;
+            this.highlightElement(i, '#03de19')
+            
+            for(let j = i; j < n; j++)
+            {
+                this.highlightElement(j, '#e02f1f')
+                await this.sleep(this.animationSpeed * 1.5)    
+
+                if(this.array[j] < this.array[index])
+                {
+                    await this.resetOneElement(index);
+                    index = j
+                    this.highlightElement(index, '#03de19')
+                    this.highlightElement(i, '#0c8a18')
+                    await this.sleep(this.animationSpeed)
+                }
+                else
+                {
+                    await this.resetOneElement(j);
+                }
+            }
+            let temp = this.array[i];
+            this.array[i] = this.array[index];
+            this.array[index] = temp;
+
+
+            this.updateElementHeight(i);
+            this.updateElementHeight(index);
+            await this.sleep(this.animationSpeed)
+
+            this.resetElementColor();
         }
     }
 
