@@ -24,6 +24,10 @@ const algorithmDictionary =
     'insertion sort' : {name: "Insertion Sort : O(n^2) : O(1)", timeComplexity: "O(n^2)", spaceComplexity: "O(1)", shortDescription : "Actively inserts an element in the right place in the array until the array is sorted", urlPython: "Images/insertionSort/python.png", urlJS : "Images/insertionSort/javascript.png", urlCPP : "Images/insertionSort/cpp.png",
     fullDescription: "the algorithm starts at an index of one after the start of the array, so the second element in the array. This is saved as a key value. Then, another iterator goes through every value to the left of the key value. It checks to see if the value is larger than the key value, and if so, it shifts it right. This inserts the " + 
     "given element directly into where it is supposed to go in the array, as the shifting stops once a value less than the key value is found. This is done in an O(n^2) manner until the entire array is solved."},
+    
+    'shell sort' : {name: "Shell Sort : O(n^2) : O(1)", timeComplexity: "O(n^1.5)", spaceComplexity: "O(1)", shortDescription : "An improved version of insertion sort, where gaps pre sort the array before an insertion", urlPython: "Images/insertionSort/python.png", urlJS : "Images/insertionSort/javascript.png", urlCPP : "Images/insertionSort/cpp.png",
+    fullDescription: "the algorithm starts at an index of one after the start of the array, so the second element in the array. This is saved as a key value. Then, another iterator goes through every value to the left of the key value. It checks to see if the value is larger than the key value, and if so, it shifts it right. This inserts the " + 
+    "given element directly into where it is supposed to go in the array, as the shifting stops once a value less than the key value is found. This is done in an O(n^2) manner until the entire array is solved."}
 };
 
 
@@ -240,6 +244,7 @@ class algorithimVisualizer{
                 else if(this.arrayName == "bogo sort")       { this.bogoSortStartUp();}
                 else if(this.arrayName == "selection sort")  { this.selectionSortStartUp();}
                 else if(this.arrayName == "insertion sort")  { this.insertionSortStartUp();}
+                else if(this.arrayName == "shell sort")      { this.shellSortStartUp();}
                 console.log(this.array)
             }
         })
@@ -812,7 +817,6 @@ class algorithimVisualizer{
 
         this.isSorting = false;
     }
-
     async insertionSort()
     {
         let n = this.array.length;
@@ -846,6 +850,68 @@ class algorithimVisualizer{
 
             await this.sleep(this.animationSpeed)
             this.resetElementColor();
+        }
+    }
+
+    //---------------------------------Shell Sort-------------------------------------------------
+    async shellSortStartUp()
+    {
+        if(this.isSorting) {return;}
+        this.isSorting = true;
+
+        //set all elements to default
+        this.resetElementColor();
+
+        //actual sorter call
+        await this.shellSort();
+
+        //marked all of them as sorted when done
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.classList.add('sorted');
+            await this.sleep(10);
+        }    
+
+        this.isSorting = false;
+    }
+    async shellSort()
+    {
+        let n = this.array.length;
+
+        for(let gap = Math.floor(n/2); gap > 0; gap = Math.floor(gap/2))
+        {
+            for(let i = gap; i < n; i++)
+            {
+                let temp = this.array[i];
+                this.highlightElement(i, '#e02f1f');
+                await this.sleep(this.animationSpeed/2);
+                
+                let j = i;
+
+                while(j >= gap && this.array[j-gap] > temp)
+                {
+                    //showcase the gap comparison between elements
+                    await this.highlightElement(j, '#e01fd0');
+                    await this.highlightElement(j-gap, '#e01fd0');
+                    await this.sleep(this.animationSpeed);
+
+                    this.array[j] = this.array[j-gap];
+                    this.updateElementHeight(j);  
+                    
+                    await this.sleep(this.animationSpeed/2);
+                    await this.resetOneElement(j-gap);
+                    await this.resetOneElement(j);
+                    
+                    j -= gap;
+                }
+                this.array[j] = temp;
+                this.updateElementHeight(j);  
+                this.highlightElement(j, '#e02f1f');
+                
+                await this.sleep(this.animationSpeed)
+                this.resetElementColor();
+            }
         }
     }
 
