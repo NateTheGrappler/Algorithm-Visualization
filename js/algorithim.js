@@ -18,8 +18,12 @@ const algorithmDictionary =
     fullDescription: "The algorithm checks to see if the array is sorted, and then if it is not, it randomly shuffles it. After shuffling it checks once more, and so on and so forth until the array is sorted."},
 
     'selection sort' : {name: "Selection Sort : O(n^2) : O(1)", timeComplexity: "O(n^2)", spaceComplexity: "O(1)", shortDescription : "The most human sort, finding the smallest value, and the putting it in order", urlPython: "Images/selectionSort/python.png", urlJS : "Images/selectionSort/javascript.png", urlCPP : "Images/selectionSort/cpp.png",
-    fullDescription: "This sort is very similar to bubble sort, in that it is simple to implement, and that it runs in O(n^2) time. Overall, this algorithim sorts in place, meaning it does not create any new arrays etc. " + 
-    "Instead, the algorithm stores the index of the first 'non sorted' portion of the array, and then incrementiativly loops through the array to see if there a smaller value. Upon looping through the whole array, the smallest value found is swapped with the first element of the 'non sorted' array. Process is repeated with the rest of the array until sorted."}
+    fullDescription: "This sort is very similar to bubble sort, in that it is simple to implement, and that it runs in O(n^2) time. Overall, this algorithm sorts in place, meaning it does not create any new arrays etc. " + 
+    "Instead, the algorithm stores the index of the first 'non sorted' portion of the array, and then increments/loops through the array to see if there a smaller value. Upon looping through the whole array, the smallest value found is swapped with the first element of the 'non sorted' array. Process is repeated with the rest of the array until sorted."},
+
+    'insertion sort' : {name: "Insertion Sort : O(n^2) : O(1)", timeComplexity: "O(n^2)", spaceComplexity: "O(1)", shortDescription : "Actively inserts an element in the right place in the array until the array is sorted", urlPython: "Images/insertionSort/python.png", urlJS : "Images/insertionSort/javascript.png", urlCPP : "Images/insertionSort/cpp.png",
+    fullDescription: "the algorithm starts at an index of one after the start of the array, so the second element in the array. This is saved as a key value. Then, another iterator goes through every value to the left of the key value. It checks to see if the value is larger than the key value, and if so, it shifts it right. This inserts the " + 
+    "given element directly into where it is supposed to go in the array, as the shifting stops once a value less than the key value is found. This is done in an O(n^2) manner until the entire array is solved."},
 };
 
 
@@ -235,6 +239,8 @@ class algorithimVisualizer{
                 else if(this.arrayName == "quick sort")      { this.quickSortStartUp(); }
                 else if(this.arrayName == "bogo sort")       { this.bogoSortStartUp();}
                 else if(this.arrayName == "selection sort")  { this.selectionSortStartUp();}
+                else if(this.arrayName == "insertion sort")  { this.insertionSortStartUp();}
+                console.log(this.array)
             }
         })
         document.getElementById("pauseButton").addEventListener('click', () =>
@@ -269,7 +275,6 @@ class algorithimVisualizer{
         });
 
     }
-
     generateButtonClick()
     {
         //get the min and max value just in case they have changed
@@ -781,6 +786,65 @@ class algorithimVisualizer{
             this.updateElementHeight(index);
             await this.sleep(this.animationSpeed)
 
+            this.resetElementColor();
+        }
+    }
+
+    //---------------------------------Insertion Sort-------------------------------------------------
+    async insertionSortStartUp()
+    {
+        if(this.isSorting) {return;}
+        this.isSorting = true;
+
+        //set all elements to default
+        this.resetElementColor();
+
+        //actual sorter call
+        await this.insertionSort();
+
+        //marked all of them as sorted when done
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.classList.add('sorted');
+            await this.sleep(10);
+        }    
+
+        this.isSorting = false;
+    }
+
+    async insertionSort()
+    {
+        let n = this.array.length;
+
+        for(let i = 1; i < n; i++)
+        {
+            let key = this.array[i];
+            this.highlightElement(i, '#03de19');
+            await this.sleep(this.animationSpeed/2);
+            let j = i - 1;
+            
+            while(j >= 0 && key < this.array[j])
+            {
+                
+                await this.highlightElement(j+1, '#e02f1f');
+                await this.highlightElement(j, '#e02f1f');
+                await this.sleep(this.animationSpeed);
+
+                this.array[j+1] = this.array[j];
+                this.updateElementHeight(j+1);  
+                
+                await this.sleep(this.animationSpeed/2);
+                await this.resetOneElement(j+1);
+                await this.resetOneElement(j);
+                
+                j-=1;
+            }
+            this.array[j+1] = key
+            this.updateElementHeight(j+1);
+            this.highlightElement(j+1, '#03de19');
+
+            await this.sleep(this.animationSpeed)
             this.resetElementColor();
         }
     }
