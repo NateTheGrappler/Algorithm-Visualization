@@ -25,9 +25,12 @@ const algorithmDictionary =
     fullDescription: "the algorithm starts at an index of one after the start of the array, so the second element in the array. This is saved as a key value. Then, another iterator goes through every value to the left of the key value. It checks to see if the value is larger than the key value, and if so, it shifts it right. This inserts the " + 
     "given element directly into where it is supposed to go in the array, as the shifting stops once a value less than the key value is found. This is done in an O(n^2) manner until the entire array is solved."},
     
-    'shell sort' : {name: "Shell Sort : O(n^2) : O(1)", timeComplexity: "O(n^1.5)", spaceComplexity: "O(1)", shortDescription : "An improved version of insertion sort, where gaps pre sort the array before an insertion", urlPython: "Images/insertionSort/python.png", urlJS : "Images/insertionSort/javascript.png", urlCPP : "Images/insertionSort/cpp.png",
-    fullDescription: "the algorithm starts at an index of one after the start of the array, so the second element in the array. This is saved as a key value. Then, another iterator goes through every value to the left of the key value. It checks to see if the value is larger than the key value, and if so, it shifts it right. This inserts the " + 
-    "given element directly into where it is supposed to go in the array, as the shifting stops once a value less than the key value is found. This is done in an O(n^2) manner until the entire array is solved."}
+    'shell sort' : {name: "Shell Sort : O(n^1.5) : O(1)", timeComplexity: "O(n^1.5)", spaceComplexity: "O(1)", shortDescription : "An improved version of insertion sort, where gaps pre sort the array before an insertion", urlPython: "Images/shellSort/python.png", urlJS : "Images/shellSort/javascript.png", urlCPP : "Images/shellSort/cpp.png",
+    fullDescription: "This algorithm is an improvement of insertion sort. However, instead of inserting an element by performing a multitude of swaps, this algorithm functions by setting a gap, that is usually the size of the array, and swapping elements in that gap. This gap gets smaller and smaller in a log(n) fashion. " + 
+    "This allows for elements, that in insertion sort would take multiple swaps, now only require one. The gaps are lessened continuously until the gap is only equal to one, at which point the array is sorted. It was on of the first algorithms to break past the o(n^2) wall."},
+
+    'bucket sort' : {name: "Bucket Sort : O(n)-O(n^2) : O(n + k)", timeComplexity: "O(n)-O(n^2)", spaceComplexity: "O(n + k)", shortDescription : "Creates a large number of buckets(arrays) and then based on index sort values into them. Then sort the buckets and merge back to array", urlPython: "Images/bogoSort/python.png", urlJS : "Images/bogoSort/javascript.png", urlCPP : "Images/bogoSort/cpp.png",
+    fullDescription: "The algorithm checks to see if the array is sorted, and then if it is not, it randomly shuffles it. After shuffling it checks once more, and so on and so forth until the array is sorted."}
 };
 
 
@@ -245,6 +248,7 @@ class algorithimVisualizer{
                 else if(this.arrayName == "selection sort")  { this.selectionSortStartUp();}
                 else if(this.arrayName == "insertion sort")  { this.insertionSortStartUp();}
                 else if(this.arrayName == "shell sort")      { this.shellSortStartUp();}
+                else if(this.arrayName == "bucket sort")     { this.bucketSortStartUp();}
                 console.log(this.array)
             }
         })
@@ -911,6 +915,110 @@ class algorithimVisualizer{
                 
                 await this.sleep(this.animationSpeed)
                 this.resetElementColor();
+            }
+        }
+    }
+
+    //--------------------------------Bucket Sort-----------------------------------------------------
+    async bucketSortStartUp()
+    {
+        if(this.isSorting) {return;}
+        this.isSorting = true;
+
+        //set all elements to default
+        this.resetElementColor();
+
+        //actual sorter call
+        await this.bucketSort();
+
+        //marked all of them as sorted when done
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.classList.add('sorted');
+            await this.sleep(10);
+        }    
+
+        this.isSorting = false;
+    }
+    async bucketInsertionSort(bucket)
+    {
+        let n = bucket.length
+
+        for(let i = 1; i < n; i++)
+        {
+            let key = bucket[i];
+            let j = i - 1;
+
+            while(j >= 0 && bucket[j] > key)
+            {
+                bucket[j+1] = bucket[j]
+                j--;
+            }
+            bucket[j+1] = key;
+        }
+    }
+    async bucketSort()
+    {
+        let n = this.array.length;
+        let minVal = Math.min(...this.array);
+        let maxVal = Math.max(...this.array);
+        let buckets = Array.from({length: n}, () => []);
+
+        //distribution
+        for(let i = 0; i<this.array.length; i++)
+        {
+            let num = this.array[i];
+            let normalized = (num - minVal) / (maxVal - minVal);
+            let bucketIndex = Math.floor(normalized * n);
+            if(bucketIndex == n) { bucketIndex = n -1;}
+            buckets[bucketIndex].push(num);
+
+            await this.highlightCurrent(i, '#f39c12'); // Yellow for distribution
+            await this.sleep(this.animationSpeed / 5);
+            await this.resetOneElement(i);
+        }
+
+        //sorting
+        for (let bIndex = 0; bIndex < buckets.length; bIndex++) 
+        {
+            if (buckets[bIndex].length > 0) 
+            {
+                await this.sleep(this.animationSpeed / 2);
+                await this.bucketInsertionSort(buckets[bIndex]);
+            }
+        }
+
+        //merge
+        let index = 0;
+        for(let bucketIndex = 0; bucketIndex < buckets.length; bucketIndex++)
+        {
+            let bucket = buckets[bucketIndex];
+            if(bucket.length > 0)
+            {
+                for(let i = 0; i < this.array.length; i++)
+                {
+                    if(i >= index && i < index + bucket.length)
+                    {
+                        await this.highlightElement(i, '#27ae60');
+                    }
+                }
+
+                await this.sleep(this.animationSpeed / 2);
+
+                for( let num of bucket)
+                {
+                    this.array[index] = num;
+                    await this.updateElementHeight(index);
+
+                    await this.sleep(this.animationSpeed / 5);
+                    index++;
+                }
+
+                for (let i = 0; i < this.array.length; i++) 
+                {
+                    await this.resetOneElement(i);
+                }
             }
         }
     }
