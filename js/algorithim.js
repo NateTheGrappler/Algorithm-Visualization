@@ -29,8 +29,15 @@ const algorithmDictionary =
     fullDescription: "This algorithm is an improvement of insertion sort. However, instead of inserting an element by performing a multitude of swaps, this algorithm functions by setting a gap, that is usually the size of the array, and swapping elements in that gap. This gap gets smaller and smaller in a log(n) fashion. " + 
     "This allows for elements, that in insertion sort would take multiple swaps, now only require one. The gaps are lessened continuously until the gap is only equal to one, at which point the array is sorted. It was on of the first algorithms to break past the o(n^2) wall."},
 
-    'bucket sort' : {name: "Bucket Sort : O(n)-O(n^2) : O(n + k)", timeComplexity: "O(n)-O(n^2)", spaceComplexity: "O(n + k)", shortDescription : "Creates a large number of buckets(arrays) and then based on index sort values into them. Then sort the buckets and merge back to array", urlPython: "Images/bogoSort/python.png", urlJS : "Images/bogoSort/javascript.png", urlCPP : "Images/bogoSort/cpp.png",
-    fullDescription: "The algorithm checks to see if the array is sorted, and then if it is not, it randomly shuffles it. After shuffling it checks once more, and so on and so forth until the array is sorted."}
+    'bucket sort' : {name: "Bucket Sort : O(n)-O(n^2) : O(n + k)", timeComplexity: "O(n)-O(n^2)", spaceComplexity: "O(n + k)", shortDescription : "Creates a large number of buckets(arrays) and then based on index sort values into them. Then sort the buckets and merge back to array", urlPython: "Images/bucketSort/python.png", urlJS : "Images/bucketSort/javascript.png", urlCPP : "Images/bucketSort/cpp.png",
+    fullDescription: "The array is divided into an n number of arrays (similar to merge sort). However, each of these arrays is a given bucket, at a given index. The index of this bucket is also the actual category for that bucket. Meaning, that for example the 9th bucket would be for numbers that have a 9 as their first number. Essentially, every one of the elements is split up among the buckets " + 
+    "upon which, the inner buckets are sorted using insertion sort, as it works best for smaller arrays. After all buckets are sorted, the buckets are then merged in accordance to their index in the array, leading to a fully sorted array. This works best when there is a wide spread in the array, as it means that more buckets are filled up. Thus, if each bucket only gets one element, " +  
+    "the best case for time complexity is considered O(n). However, if the elements are very close, then they all end up with one bucket, and you end up with the time complexity of insertion sort, or whatever sort you use, such as O(n^2)"},
+
+    'counting sort' : {name: "Counting Sort : O(n+k) : O(n+k)", timeComplexity: "O(n+k)", spaceComplexity: "O(n+k)", shortDescription : "Counts the frequency of elements occurring in an array, and then sorts them based on index and frequency value", urlPython: "Images/countingSort/python.png", urlJS : "Images/countingSort/javascript.png", urlCPP : "Images/countingSort/cpp.png",
+    fullDescription: "This algorithm creates a count array  that is of the size from 0 to the maximum value of the original array, populating this count array with zeros. The smaller the range of the array, the faster that this algorithm is because the count array is smaller. This count array is created, and then the original array is looped through once, with the count array being indexed at the " + 
+    "value of the original array. The count array is incremented by one at said value index. This is done in order to count the frequency of the elements in the array. To then normalize the count array in reference to the original array, all of the previous elements are summed up in the count array. basically in a countarr[i] += countarr[i-1] fashion. " + 
+    "After having done this, a third, answer array, is then created at size n where n is the length of the original array. Looping backwards from the original array (to keep things stable), you index this answer array at countArr[originalArr[i]-1], and set this to the value of originalArr[i]. Doing so, you get the fully sorted array i O(n+k) time where k is the max value of your n number of elements" },
 };
 
 
@@ -249,6 +256,7 @@ class algorithimVisualizer{
                 else if(this.arrayName == "insertion sort")  { this.insertionSortStartUp();}
                 else if(this.arrayName == "shell sort")      { this.shellSortStartUp();}
                 else if(this.arrayName == "bucket sort")     { this.bucketSortStartUp();}
+                else if(this.arrayName == "counting sort")   { this.countingSortStartUp();}
                 console.log(this.array)
             }
         })
@@ -1020,6 +1028,69 @@ class algorithimVisualizer{
                     await this.resetOneElement(i);
                 }
             }
+        }
+    }
+
+    //--------------------------------Counting Sort-----------------------------------------------------
+    async countingSortStartUp()
+    {
+        if(this.isSorting) {return;}
+        this.isSorting = true;
+
+        //set all elements to default
+        this.resetElementColor();
+
+        //actual sorter call
+        await this.countingSort();
+
+        //marked all of them as sorted when done
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.classList.add('sorted');
+            await this.sleep(10);
+        }    
+
+        this.isSorting = false;
+    }
+    async countingSort()
+    {
+        let copyArray = [...this.array]
+        let largestValue = Math.max(...copyArray);
+        let countingArray = new Array(largestValue + 1).fill(0);
+
+        //setting up the count array and displaying it as well
+        for(let value of copyArray)
+        {
+            countingArray[value] += 1;
+        }
+
+        for(let i = 1; i <= largestValue; i++)
+        {
+            countingArray[i] += countingArray[i-1];
+        }
+
+        //the actual sorting portion and the visualization of the sort itself
+        let resultArray = new Array(copyArray.length);
+
+        for(let i = copyArray.length - 1; i >= 0; i--)
+        {
+            const value = copyArray[i];
+            this.highlightElement(i, '#e74c3c')
+            const position = countingArray[value] - 1;
+            resultArray[position] = value;
+            this.highlightElement(position, '#dc38ad')
+            countingArray[value] -= 1;
+            await this.sleep(this.animationSpeed * 2);
+            await this.resetOneElement(i);
+            await this.resetOneElement(position);
+        }
+
+        for(let i = resultArray.length - 1; i >= 0; i--)
+        {
+            this.array[i] = resultArray[i];
+            await this.updateElementHeight(i);
+            await this.sleep(this.animationSpeed/2);         
         }
     }
 
