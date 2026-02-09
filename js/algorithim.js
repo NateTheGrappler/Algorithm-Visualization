@@ -38,6 +38,12 @@ const algorithmDictionary =
     fullDescription: "This algorithm creates a count array  that is of the size from 0 to the maximum value of the original array, populating this count array with zeros. The smaller the range of the array, the faster that this algorithm is because the count array is smaller. This count array is created, and then the original array is looped through once, with the count array being indexed at the " + 
     "value of the original array. The count array is incremented by one at said value index. This is done in order to count the frequency of the elements in the array. To then normalize the count array in reference to the original array, all of the previous elements are summed up in the count array. basically in a countarr[i] += countarr[i-1] fashion. " + 
     "After having done this, a third, answer array, is then created at size n where n is the length of the original array. Looping backwards from the original array (to keep things stable), you index this answer array at countArr[originalArr[i]-1], and set this to the value of originalArr[i]. Doing so, you get the fully sorted array i O(n+k) time where k is the max value of your n number of elements" },
+
+    'heap sort' : {name: "Heap Sort : O(nlog(n)) : O(nlog(n))", timeComplexity: "O(nlog(n))", spaceComplexity: "O(nlog(n))", shortDescription : "An improvement on selection sort, this sort treats the array like a binary heap and sorts by comparison", urlPython: "Images/heapSort/python.png", urlJS : "Images/heapSort/javascript.png", urlCPP : "Images/heapSort/cpp.png",
+    fullDescription: "The array is first in a sense made into a binary tree, using the heapify function. In general, the tree only has two child nodes and one parent node. You first check to see if the left child is larger than the parent, then the right, if so, you swap. However, if you continue to do this up the binary tree, you eventually have the largest element " + 
+    "at the top of the tree. This element is then swapped with the last element in the list, as which point, you call heapify again and start the process to get the second largest element, putting it at the end of the array, ignoring the already sorted list. This is what leads to the nlog(n) time, because the binary tree allows for log(n) " + 
+    "access to getting the correct element, unlike selection sort, which heap sort is based on. However, it still has to be done n amount of times in order to sort the array. The issue is that if this is done recursively, it can become very expensive, and cause slower solve speeds. However, nlog(n) time is always guaranteed." },
+
 };
 
 
@@ -257,6 +263,7 @@ class algorithimVisualizer{
                 else if(this.arrayName == "shell sort")      { this.shellSortStartUp();}
                 else if(this.arrayName == "bucket sort")     { this.bucketSortStartUp();}
                 else if(this.arrayName == "counting sort")   { this.countingSortStartUp();}
+                else if(this.arrayName == "heap sort")       { this.heapSortStartUp();}
                 console.log(this.array)
             }
         })
@@ -1092,6 +1099,92 @@ class algorithimVisualizer{
             await this.updateElementHeight(i);
             await this.sleep(this.animationSpeed/2);         
         }
+    }
+
+    //--------------------------------Heap Sort-----------------------------------------------------
+    async heapSortStartUp()
+    {
+        if(this.isSorting) {return;}
+        this.isSorting = true;
+
+        //set all elements to default
+        this.resetElementColor();
+
+        //actual sorter call
+        await this.heapSort();
+
+        //marked all of them as sorted when done
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.classList.add('sorted');
+            await this.sleep(10);
+        }    
+
+        this.isSorting = false;
+    }
+
+    async heapify(n, i)
+    {
+        let largest = i;
+
+        let left  = i * 2 + 1;
+        let right = i * 2 + 2;
+
+        if(n > left && this.array[left] > this.array[largest])
+        {
+            largest = left;
+        }
+        if(n > right && this.array[right] > this.array[largest])
+        {
+            largest = right;
+        }
+
+        if(largest != i)
+        {
+            [this.array[i], this.array[largest]] = [this.array[largest], this.array[i]];
+
+            this.highlightElement(i, '#e74c3c');
+            this.highlightElement(largest, '#3ce747');
+            await this.updateElementHeight(i);
+            await this.updateElementHeight(largest);
+            await this.sleep(this.animationSpeed);
+
+            await this.resetOneElement(i);
+            await this.resetOneElement(largest);
+            await this.sleep(this.animationSpeed);
+
+            await this.heapify(n, largest);
+        }
+    }
+
+    async heapSort()
+    {
+        let n = this.array.length;
+
+        for(let i = Math.floor(n / 2) - 1; i >=0; i--)
+        {
+            await this.heapify(n, i);
+        }
+
+        for(let i = n-1; i > 0; i--)
+        {
+            [this.array[0], this.array[i]] = [this.array[i], this.array[0]];
+
+            this.highlightElement(i, '#e74c3c');
+            this.highlightElement(0, '#3ce747');
+            await this.updateElementHeight(i);
+            await this.updateElementHeight(0);
+            await this.sleep(this.animationSpeed);
+
+            await this.resetOneElement(i);
+            await this.resetOneElement(0);
+            await this.sleep(this.animationSpeed);
+
+
+            await this.heapify(i, 0);
+        }
+
     }
 
 }
