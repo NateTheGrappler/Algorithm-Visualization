@@ -39,10 +39,14 @@ const algorithmDictionary =
     "value of the original array. The count array is incremented by one at said value index. This is done in order to count the frequency of the elements in the array. To then normalize the count array in reference to the original array, all of the previous elements are summed up in the count array. basically in a countarr[i] += countarr[i-1] fashion. " + 
     "After having done this, a third, answer array, is then created at size n where n is the length of the original array. Looping backwards from the original array (to keep things stable), you index this answer array at countArr[originalArr[i]-1], and set this to the value of originalArr[i]. Doing so, you get the fully sorted array i O(n+k) time where k is the max value of your n number of elements" },
 
-    'heap sort' : {name: "Heap Sort : O(nlog(n)) : O(nlog(n))", timeComplexity: "O(nlog(n))", spaceComplexity: "O(nlog(n))", shortDescription : "An improvement on selection sort, this sort treats the array like a binary heap and sorts by comparison", urlPython: "Images/heapSort/python.png", urlJS : "Images/heapSort/javascript.png", urlCPP : "Images/heapSort/cpp.png",
+    'heap sort' : {name: "Heap Sort : O(nlog(n)) : O(1)", timeComplexity: "O(nlog(n))", spaceComplexity: "O(1)", shortDescription : "An improvement on selection sort, this sort treats the array like a binary heap and sorts by comparison", urlPython: "Images/heapSort/python.png", urlJS : "Images/heapSort/javascript.png", urlCPP : "Images/heapSort/cpp.png",
     fullDescription: "The array is first in a sense made into a binary tree, using the heapify function. In general, the tree only has two child nodes and one parent node. You first check to see if the left child is larger than the parent, then the right, if so, you swap. However, if you continue to do this up the binary tree, you eventually have the largest element " + 
     "at the top of the tree. This element is then swapped with the last element in the list, as which point, you call heapify again and start the process to get the second largest element, putting it at the end of the array, ignoring the already sorted list. This is what leads to the nlog(n) time, because the binary tree allows for log(n) " + 
     "access to getting the correct element, unlike selection sort, which heap sort is based on. However, it still has to be done n amount of times in order to sort the array. The issue is that if this is done recursively, it can become very expensive, and cause slower solve speeds. However, nlog(n) time is always guaranteed." },
+
+    'radix sort' : {name: "Radix Sort : O(n*d) : O(n + k)", timeComplexity: "O(n*d)", spaceComplexity: "O(n + k)", shortDescription : "Sorts the elements without comparison based on the value of their individual digits", urlPython: "Images/radixSort/python.png", urlJS : "Images/radixSort/javascript.png", urlCPP : "Images/radixSort/cpp.png",
+    fullDescription: "This algorithm is a non comparison algorithm that sorts the array based on the digits of it's values. Basically, the array takes the maximum value that is in the array, and then, based on the number of digits in that max, it iterates through sorting all of the elements into buckets. There is only " +
+    "10 of these buckets, with 0-9. A value's ones place is looked at, and based where it is between 0 and 9, that is the bucket that it is sorted into. This is then done to the tens place and so on and so forth. After all of the eventual digit values are iterated through, the array is complete. Leading to a time of O(n*d) where d is the number of digits in the max val of the array"},
 
 };
 
@@ -175,14 +179,14 @@ class algorithimVisualizer{
         const descriptionWindow = document.getElementById("mainDescriptionWindow");
 
         //add a click to all of them
-        document.getElementById("helpButton").addEventListener('click', () => {handleWindowClick(helpWindow)});
+        document.getElementById("helpButton").addEventListener('click', () =>        {handleWindowClick(helpWindow)});
         document.getElementById("descriptionButton").addEventListener('click', () => {handleWindowClick(descriptionWindow)});
-        document.getElementById("showCodeButton").addEventListener('click', () => {handleWindowClick(codeWindow)})
-        document.getElementById("inputButton").addEventListener('click', () => {handleWindowClick(inputWindow)});
-        document.getElementById("closeHelp").addEventListener('click', () => {handleWindowClick(helpWindow)});
-        document.getElementById("closeCode").addEventListener('click', () => {handleWindowClick(codeWindow)});
-        document.getElementById("closeInput").addEventListener('click', () => {handleWindowClick(inputWindow)});
-        document.getElementById("closeDescription").addEventListener('click', () => {handleWindowClick(descriptionWindow)});
+        document.getElementById("showCodeButton").addEventListener('click', () =>    {handleWindowClick(codeWindow)})
+        document.getElementById("inputButton").addEventListener('click', () =>       {handleWindowClick(inputWindow)});
+        document.getElementById("closeHelp").addEventListener('click', () =>         {handleWindowClick(helpWindow)});
+        document.getElementById("closeCode").addEventListener('click', () =>         {handleWindowClick(codeWindow)});
+        document.getElementById("closeInput").addEventListener('click', () =>        {handleWindowClick(inputWindow)});
+        document.getElementById("closeDescription").addEventListener('click', () =>  {handleWindowClick(descriptionWindow)});
         function handleWindowClick(window)
         {
             console.log("RAN HERE");
@@ -264,6 +268,7 @@ class algorithimVisualizer{
                 else if(this.arrayName == "bucket sort")     { this.bucketSortStartUp();}
                 else if(this.arrayName == "counting sort")   { this.countingSortStartUp();}
                 else if(this.arrayName == "heap sort")       { this.heapSortStartUp();}
+                else if(this.arrayName == "radix sort")      { this.radixSortStartUp();}
                 console.log(this.array)
             }
         })
@@ -1123,7 +1128,6 @@ class algorithimVisualizer{
 
         this.isSorting = false;
     }
-
     async heapify(n, i)
     {
         let largest = i;
@@ -1157,7 +1161,6 @@ class algorithimVisualizer{
             await this.heapify(n, largest);
         }
     }
-
     async heapSort()
     {
         let n = this.array.length;
@@ -1185,6 +1188,75 @@ class algorithimVisualizer{
             await this.heapify(i, 0);
         }
 
+    }
+
+    //--------------------------------Radix Sort-----------------------------------------------------
+    async radixSortStartUp()
+    {
+        if(this.isSorting) {return;}
+        this.isSorting = true;
+
+        //set all elements to default
+        this.resetElementColor();
+
+        //actual sorter call
+        await this.radixSort();
+
+        //marked all of them as sorted when done
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.classList.add('sorted');
+            await this.sleep(10);
+        }    
+
+        this.isSorting = false;
+    }
+    async countingSortHelper(n, exp)
+    {
+        let output = new Array(n).fill(0);
+        let count = new Array(10).fill(0);
+
+        for(let i = 0; i < n; i++)
+        {
+            let digit = Math.floor(Math.abs(this.array[i]) / exp) % 10;
+            count[digit]++;
+        }
+
+        for(let i = 1; i < 10; i++)
+        {
+            count[i] += count[i-1];
+        }
+
+        for(let i = n - 1; i >= 0; i--)
+        {
+            let digit = Math.floor(Math.abs(this.array[i]) / exp) % 10;
+            output[count[digit] - 1] = this.array[i];
+            count[digit]--;
+        }
+
+        for(let i = 0; i < n; i++)
+        {
+            this.array[i] = output[i];
+        }
+        
+        for(let i = 0; i < n; i++)
+        {
+            this.highlightElement(i, '#2a2afb');
+            await this.updateElementHeight(i);
+            await this.sleep(this.animationSpeed/2);
+            await this.resetOneElement(i);            
+        }
+    }
+    async radixSort()
+    {
+        let n = this.array.length;
+        let maxVal = Math.max(...this.array);
+
+        for(let exp = 1; Math.floor(maxVal / exp) > 0; exp *= 10)
+        {
+            await this.countingSortHelper(n, exp);
+        }
     }
 
 }
