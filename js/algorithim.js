@@ -48,6 +48,10 @@ const algorithmDictionary =
     fullDescription: "This algorithm is a non comparison algorithm that sorts the array based on the digits of it's values. Basically, the array takes the maximum value that is in the array, and then, based on the number of digits in that max, it iterates through sorting all of the elements into buckets. There is only " +
     "10 of these buckets, with 0-9. A value's ones place is looked at, and based where it is between 0 and 9, that is the bucket that it is sorted into. This is then done to the tens place and so on and so forth. After all of the eventual digit values are iterated through, the array is complete. Leading to a time of O(n*d) where d is the number of digits in the max val of the array"},
 
+    'tim sort' : {name: "Tim Sort : O(nlog(n)) : O(n)", timeComplexity: " O(nlog(n))", spaceComplexity: "O(n)", shortDescription : "A mixture of selection sort and merge sort, where runs are found, sorted, and then merged into one sorted array", urlPython: "Images/timSort/python.png", urlJS : "Images/timSort/javascript.png", urlCPP : "Images/timSort/cpp.png",
+    fullDescription: "This algorithm is a non comparison algorithm that sorts the array based on the digits of it's values. Basically, the array takes the maximum value that is in the array, and then, based on the number of digits in that max, it iterates through sorting all of the elements into buckets. There is only " +
+    "10 of these buckets, with 0-9. A value's ones place is looked at, and based where it is between 0 and 9, that is the bucket that it is sorted into. This is then done to the tens place and so on and so forth. After all of the eventual digit values are iterated through, the array is complete. Leading to a time of O(n*d) where d is the number of digits in the max val of the array"},
+
 };
 
 
@@ -67,6 +71,7 @@ class algorithimVisualizer{
         this.speedSlider = document.getElementById("speedSlider");
         this.arrayName = "";
         this.algData = algorithmDictionary[""];
+        this.minRUN = 32;
 
         //status
         this.comparisions = 0;
@@ -269,6 +274,7 @@ class algorithimVisualizer{
                 else if(this.arrayName == "counting sort")   { this.countingSortStartUp();}
                 else if(this.arrayName == "heap sort")       { this.heapSortStartUp();}
                 else if(this.arrayName == "radix sort")      { this.radixSortStartUp();}
+                else if(this.arrayName == "tim sort")        { this.timSortStartUp();}
                 console.log(this.array)
             }
         })
@@ -1257,6 +1263,186 @@ class algorithimVisualizer{
         {
             await this.countingSortHelper(n, exp);
         }
+    }
+    //--------------------------------Tim Sort-----------------------------------------------------
+    async timSortStartUp()
+    {
+        if(this.isSorting) {return;}
+        this.isSorting = true;
+
+        //set all elements to default
+        this.resetElementColor();
+
+        //actual sorter call
+        await this.timSort();
+
+        //marked all of them as sorted when done
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.classList.add('sorted');
+            await this.sleep(10);
+        }    
+
+        this.isSorting = false;
+    } 
+    calcMinRun(n)
+    {
+        let r = 0
+        if(n < this.minRUN)
+        {
+            return n;
+        }
+
+        while(n >= this.minRUN)
+        {
+            r |= (n & 1);
+            n >>= 1;
+        }
+        return n + r;
+    }
+    async timInsertionSort(arr, left, right)
+    {
+        for(let i = left + 1; i <= right; i++)
+        {
+            let key = arr[i];
+            this.highlightElement(i, '#03de19');
+            await this.sleep(this.animationSpeed/2);
+            let j = i - 1;
+            while(j >= left && arr[j] > key)
+            {
+                await this.highlightElement(j+1, '#e02f1f');
+                await this.highlightElement(j, '#e02f1f');
+                await this.sleep(this.animationSpeed/4);
+
+                arr[j + 1] = arr[j];
+                await this.updateElementHeight(j+1);
+
+                await this.sleep(this.animationSpeed/4);
+                await this.resetOneElement(j+1);
+                await this.resetOneElement(j);
+                j -= 1;
+            }
+            arr[j+1] = key;
+            await this.updateElementHeight(j+1);
+            this.resetElementColor();
+        }
+    }
+    async timMerge(arr, l, m, r)
+    {
+        const left = arr.slice(l, m+1);
+        const right = arr.slice(m+1, r+1);
+
+        let i = 0, j = 0, k = l;
+        while(i < left.length && j < right.length)
+        {
+            if(left[i] <= right[j])
+            {
+                arr[k] = left[i];
+                i++;
+            }
+            else
+            {
+                arr[k] = right[j];
+                j++;
+            }
+            await this.updateElementHeight(k);
+            this.highlightElement(k, '#0357de');
+            await this.sleep(this.animationSpeed / 3);
+            await this.resetOneElement(k)
+            k++;
+        }
+        while(i < left.length)
+        {
+            arr[k] = left[i];
+            this.highlightElement(k, '#0357de');
+            await this.updateElementHeight(k);
+            await this.sleep(this.animationSpeed / 3);
+            await this.resetOneElement(k)
+            i++;
+            k++;
+        }
+        while(j < right.length)
+        {
+            arr[k] = right[j];
+            await this.updateElementHeight(k);
+            this.highlightElement(k, '#0357de');
+            await this.sleep(this.animationSpeed / 3);
+            await this.resetOneElement(k)
+            j++;
+            k++;
+        } 
+    }
+    async findRun(arr, start, n)
+    {
+        let end = start + 1;
+        if(end == n) return end;
+
+        if(arr[end] < arr[start])
+        {
+            while(end < n && arr[end] < arr[end -1]) end++;
+            let sub = arr.slice(start, end).reverse();
+            for(let i = start; i < end; i++)
+            {
+                arr[i] = sub[i-start];
+                await this.updateElementHeight(i);
+                this.highlightElement(i, '#de03d0');
+                await this.sleep(this.animationSpeed / 3);
+                await this.resetOneElement(i);
+            } 
+        }
+        else
+        {
+            while(end < n && arr[end] >= arr[end - 1]) end++;
+        }
+        return end
+    }
+    async timSort() {
+        const n = this.array.length;
+
+        const minRun = this.calcMinRun(n);
+        const runs = [];
+
+        let i = 0;
+        while (i < n) 
+        {
+            let runEnd = await this.findRun(this.array, i, n);
+            let runLen = runEnd - i;
+
+            if (runLen < minRun) 
+            {
+                let end = Math.min(i + minRun, n);
+                await this.timInsertionSort(this.array, i, end - 1);
+                runEnd = end;
+            }
+            runs.push([i, runEnd]);
+            i = runEnd;
+
+            while (runs.length > 1) 
+            {
+                const [l1, r1] = runs[runs.length - 2];
+                const [l2, r2] = runs[runs.length - 1];
+                const len1 = r1 - l1, len2 = r2 - l2;
+
+                if (len1 <= len2) 
+                {
+                    await this.timMerge(this.array, l1, r1 - 1, r2 - 1);
+                    runs.pop();
+                    runs[runs.length - 1] = [l1, r2];
+                } 
+                else break;
+            }
+        }
+
+        while (runs.length > 1) 
+        {
+            const [l1, r1] = runs[runs.length - 2];
+            const [l2, r2] = runs[runs.length - 1];
+            await this.timMerge(this.array, l1, r1 - 1, r2 - 1);
+            runs.pop();
+            runs[runs.length - 1] = [l1, r2];
+        }
+
     }
 
 }
