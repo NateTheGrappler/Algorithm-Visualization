@@ -49,9 +49,13 @@ const algorithmDictionary =
     "10 of these buckets, with 0-9. A value's ones place is looked at, and based where it is between 0 and 9, that is the bucket that it is sorted into. This is then done to the tens place and so on and so forth. After all of the eventual digit values are iterated through, the array is complete. Leading to a time of O(n*d) where d is the number of digits in the max val of the array"},
 
     'tim sort' : {name: "Tim Sort : O(nlog(n)) : O(n)", timeComplexity: " O(nlog(n))", spaceComplexity: "O(n)", shortDescription : "A mixture of selection sort and merge sort, where runs are found, sorted, and then merged into one sorted array", urlPython: "Images/timSort/python.png", urlJS : "Images/timSort/javascript.png", urlCPP : "Images/timSort/cpp.png",
-    fullDescription: "This algorithm is a non comparison algorithm that sorts the array based on the digits of it's values. Basically, the array takes the maximum value that is in the array, and then, based on the number of digits in that max, it iterates through sorting all of the elements into buckets. There is only " +
-    "10 of these buckets, with 0-9. A value's ones place is looked at, and based where it is between 0 and 9, that is the bucket that it is sorted into. This is then done to the tens place and so on and so forth. After all of the eventual digit values are iterated through, the array is complete. Leading to a time of O(n*d) where d is the number of digits in the max val of the array"},
+    fullDescription: "This sorting algorithm is a mix of insertion sort and merge sort. At first, it calculates the amount of runs, which is basically a small segment of the array that is already sorted or near sorted. It takes this run, and if it is sorted but in reverse then it sorts it reverses it, otherwise it just continues to calculate the length of this run. " + 
+    "Now, if the run is under a length of 32, the algorithm uses insertion sort in order to sort the array, and if it is longer than 32, then it uses merge sort to sort the smaller runs that were sorted with insertion sort. This is done until the array is sorted. It is the sorting algorithm that is used in python's own .sort or in java 7. It is most practical because it works " +
+    "well with real life data, which is often times already partially sorted in such smaller runs due to the nature of chance."},
 
+    'intro sort' : {name: "Intro Sort : O(nlog(n)) : O(log(n))", timeComplexity: "O(nlog(n))", spaceComplexity: "O(log(n))", shortDescription : "A mix of heap, quick, and insertion sort in order to maximize efficiency by taking the best elements of all three into one.", urlPython: "Images/introSort/python.png", urlJS : "Images/introSort/javascript.png", urlCPP : "Images/introSort/cpp.png",
+    fullDescription: "This algorithm works by maximizing the efficiency of each of the sorts that it is made up of. For example, insertion sort works better than quick sort for smaller arrays because it requires less overhead. So, intro sort uses selection sort when the array is small enough. Equally, if the main sorting method of quicksort, goes too far recursively, it reaches a speed " + 
+    "of O(n^2), so to avoid this, intro sort also implements heap sort, which has a O(nlog(n)) time complexity always, even though it is slower on it's own than quick sort due to moving every element in the array. OVerall, it is an adaptive sort that takes the best out of very sorting method it contains."},
 };
 
 
@@ -275,6 +279,7 @@ class algorithimVisualizer{
                 else if(this.arrayName == "heap sort")       { this.heapSortStartUp();}
                 else if(this.arrayName == "radix sort")      { this.radixSortStartUp();}
                 else if(this.arrayName == "tim sort")        { this.timSortStartUp();}
+                else if(this.arrayName == "intro sort")      { this.introSortStartUp();}
                 console.log(this.array)
             }
         })
@@ -1445,6 +1450,180 @@ class algorithimVisualizer{
 
     }
 
+    //---------------------------------Intro Sort------------------------------------------------------
+    async introSortStartUp()
+    {
+        if(this.isSorting) {return;}
+        this.isSorting = true;
+
+        //set all elements to default
+        this.resetElementColor();
+
+        //actual sorter call
+        await this.introSort();
+
+        //marked all of them as sorted when done
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.classList.add('sorted');
+            await this.sleep(10);
+        }    
+
+        this.isSorting = false;
+    } 
+    async introPartition(arr, start, end) 
+    {
+        let mid = Math.floor((start + end) / 2);
+
+        if (arr[mid] < arr[start]) 
+        {
+            [arr[start], arr[mid]] = [arr[mid], arr[start]];
+            await this.updateElementHeight(start);
+            await this.updateElementHeight(mid);
+            await this.sleep(this.animationSpeed / 3);
+        }
+        if (arr[end] < arr[start]) 
+        {
+            [arr[end], arr[start]] = [arr[start], arr[end]];
+            await this.updateElementHeight(start);
+            await this.updateElementHeight(end);
+            await this.sleep(this.animationSpeed / 3);
+        }
+        if (arr[mid] > arr[end]) 
+        {
+            [arr[mid], arr[end]] = [arr[end], arr[mid]];
+            await this.updateElementHeight(end);
+            await this.updateElementHeight(mid);
+            await this.sleep(this.animationSpeed / 3);
+        }
+
+        let pivot = arr[mid];
+        [arr[mid], arr[end - 1]] = [arr[end - 1], arr[mid]];
+        await this.updateElementHeight(end-1);
+        await this.updateElementHeight(mid);
+        await this.sleep(this.animationSpeed / 3);
+
+        let i = start;
+        let j = end - 2;
+
+        while (true) 
+        {
+            // Fix: Add bounds checking
+            while (i <= end - 2 && arr[i] < pivot) { i++; }
+            while (j >= start && pivot < arr[j]) { j--; }
+
+            if (i >= j) { break; }
+
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+            await this.updateElementHeight(i);
+            await this.updateElementHeight(j);
+            await this.sleep(this.animationSpeed / 3);
+            i++;
+            j--;
+        }
+        [arr[i], arr[end - 1]] = [arr[end - 1], arr[i]];
+        await this.updateElementHeight(i);
+        await this.updateElementHeight(end-1);
+        await this.sleep(this.animationSpeed / 3);
+
+        return i;
+    }
+
+    async introHeapify(arr, i, n, offset) 
+    { 
+        let largest = i;
+        let left = 2 * i + 1;
+        let right = 2 * i + 2;
+
+        if (left < n && arr[offset + left] > arr[offset + largest])
+        {
+            largest = left;
+        }
+        if (right < n && arr[offset + right] > arr[offset + largest]) 
+        {
+            largest = right;
+        }
+
+        if (largest !== i) 
+        {
+            [arr[offset + i], arr[offset + largest]] = [arr[offset + largest], arr[offset + i]];
+            await this.updateElementHeight(offset + i);
+            await this.updateElementHeight(offset + largest);
+            await this.sleep(this.animationSpeed / 3);
+
+            await this.introHeapify(arr, largest, n, offset);
+        }
+    }
+
+    async introHeapSort(arr, start, end) 
+    {
+        let n = end - start + 1;
+
+        for (let i = Math.floor(n / 2) - 1; i >= 0; i--) 
+        {
+            await this.introHeapify(arr, i, n, start);
+        }
+        for (let i = n - 1; i > 0; i--) 
+        {
+            [arr[start], arr[start + i]] = [arr[start + i], arr[start]];
+            await this.updateElementHeight(start);
+            await this.updateElementHeight(start + i);
+            await this.sleep(this.animationSpeed / 3);
+
+            await this.introHeapify(arr, 0, i, start);
+        }
+    }
+
+    async introInsertionSort(arr, start, end) 
+    {
+        for (let i = start + 1; i <= end; i++) 
+        {
+            let key = arr[i];
+            let j = i - 1;
+            while (j >= start && arr[j] > key) 
+            {
+                arr[j + 1] = arr[j];
+                await this.updateElementHeight(j+1);
+                await this.sleep(this.animationSpeed / 3);
+                j--;
+            }
+            arr[j + 1] = key;
+            await this.updateElementHeight(j+1);
+            await this.sleep(this.animationSpeed / 3);
+        }
+    }
+
+    async introSortHelper(arr, start, end, max_depth) 
+    {
+        let size = end - start + 1;
+
+        if (size <= 16)
+        {
+            await this.introInsertionSort(arr, start, end);
+            return;
+        }
+        
+        if (start >= end) return;
+        
+        if (max_depth === 0)
+        {
+            await this.introHeapSort(arr, start, end);
+            return;
+        }
+
+        let pivot = await this.introPartition(arr, start, end);
+        await this.introSortHelper(arr, start, pivot - 1, max_depth - 1);
+        await this.introSortHelper(arr, pivot + 1, end, max_depth - 1);
+    }
+
+    async introSort() 
+    {
+        if (this.array.length <= 1) return this.array;
+        
+        let max_depth = 2 * Math.floor(Math.log2(this.array.length));
+        await this.introSortHelper(this.array, 0, this.array.length - 1, max_depth);
+    }
 }
 
 
