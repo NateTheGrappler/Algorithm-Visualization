@@ -56,6 +56,9 @@ const algorithmDictionary =
     'intro sort' : {name: "Intro Sort : O(nlog(n)) : O(log(n))", timeComplexity: "O(nlog(n))", spaceComplexity: "O(log(n))", shortDescription : "A mix of heap, quick, and insertion sort in order to maximize efficiency by taking the best elements of all three into one.", urlPython: "Images/introSort/python.png", urlJS : "Images/introSort/javascript.png", urlCPP : "Images/introSort/cpp.png",
     fullDescription: "This algorithm works by maximizing the efficiency of each of the sorts that it is made up of. For example, insertion sort works better than quick sort for smaller arrays because it requires less overhead. So, intro sort uses selection sort when the array is small enough. Equally, if the main sorting method of quicksort, goes too far recursively, it reaches a speed " + 
     "of O(n^2), so to avoid this, intro sort also implements heap sort, which has a O(nlog(n)) time complexity always, even though it is slower on it's own than quick sort due to moving every element in the array. OVerall, it is an adaptive sort that takes the best out of very sorting method it contains."},
+
+    'stalin sort' : {name: "Stalin : O(n) : O(1)", timeComplexity: "O(n)", spaceComplexity: "O(1)", shortDescription : "The sort for all", urlPython: "Images/stalinSort/python.png", urlJS : "Images/stalinSort/javascript.png", urlCPP : "Images/stalinSort/cpp.png",
+    fullDescription: "This algorithm checks to see if the value before it is greater than the currently iterated value, if so, it deletes the value. Running in O(n) time, a joke sort."}
 };
 
 
@@ -266,7 +269,6 @@ class algorithimVisualizer{
         {
             if(!this.isSorting)
             {
-                console.log(this.arrayName);
                 if(this.arrayName == "bubble sort")          { this.bubbleSort(); }
                 else if(this.arrayName == "merge sort")      { this.mergeSortSetup(); }
                 else if(this.arrayName == "quick sort")      { this.quickSortStartUp(); }
@@ -280,7 +282,7 @@ class algorithimVisualizer{
                 else if(this.arrayName == "radix sort")      { this.radixSortStartUp();}
                 else if(this.arrayName == "tim sort")        { this.timSortStartUp();}
                 else if(this.arrayName == "intro sort")      { this.introSortStartUp();}
-                console.log(this.array)
+                else if(this.arrayName == "stalin sort")     { this.stalinSortStartUp();}
             }
         })
         document.getElementById("pauseButton").addEventListener('click', () =>
@@ -1529,7 +1531,6 @@ class algorithimVisualizer{
 
         return i;
     }
-
     async introHeapify(arr, i, n, offset) 
     { 
         let largest = i;
@@ -1555,7 +1556,6 @@ class algorithimVisualizer{
             await this.introHeapify(arr, largest, n, offset);
         }
     }
-
     async introHeapSort(arr, start, end) 
     {
         let n = end - start + 1;
@@ -1574,7 +1574,6 @@ class algorithimVisualizer{
             await this.introHeapify(arr, 0, i, start);
         }
     }
-
     async introInsertionSort(arr, start, end) 
     {
         for (let i = start + 1; i <= end; i++) 
@@ -1593,7 +1592,6 @@ class algorithimVisualizer{
             await this.sleep(this.animationSpeed / 3);
         }
     }
-
     async introSortHelper(arr, start, end, max_depth) 
     {
         let size = end - start + 1;
@@ -1616,7 +1614,6 @@ class algorithimVisualizer{
         await this.introSortHelper(arr, start, pivot - 1, max_depth - 1);
         await this.introSortHelper(arr, pivot + 1, end, max_depth - 1);
     }
-
     async introSort() 
     {
         if (this.array.length <= 1) return this.array;
@@ -1624,11 +1621,54 @@ class algorithimVisualizer{
         let max_depth = 2 * Math.floor(Math.log2(this.array.length));
         await this.introSortHelper(this.array, 0, this.array.length - 1, max_depth);
     }
+
+    //---------------------------------Stalin Sort------------------------------------------------------
+    async stalinSortStartUp()
+    {
+        if(this.isSorting) {return;}
+        this.isSorting = true;
+
+        //set all elements to default
+        this.resetElementColor();
+
+        //actual sorter call
+        await this.stalinSort();
+
+        //marked all of them as sorted when done
+        for (let i = 0; i < this.array.length; i++) 
+        {
+            const element = document.getElementById(`element-${i}`);
+            element.classList.add('sorted');
+            await this.sleep(10);
+        }    
+
+        this.isSorting = false;
+    } 
+    async stalinSort()
+    {
+        let sorted_list = [this.array[0]];
+
+        for(let i = 1; i < this.array.length; i++)
+        {
+            if(this.array[i] >= sorted_list[sorted_list.length-1])
+            {
+                sorted_list.push(this.array[i]);
+            }
+            else
+            {
+                this.array[i] = 0;
+                await this.highlightElement(i, '#de0303');
+                await this.sleep(this.animationSpeed * 3);
+                await this.updateElementHeight(i);
+            }
+        }
+
+        this.array.length = 0;
+        this.array = [...sorted_list];
+
+        this.renderArray();
+    }
 }
-
-
-
-
 
 
 
@@ -1639,14 +1679,6 @@ document.addEventListener("DOMContentLoaded", ()=>
 {
     new algorithimVisualizer();
 });
-
-
-
-
-
-
-
-
 
 //----------------------------------Code that handles the top portion of the array container-----------------------------------
 function hideHeader()
